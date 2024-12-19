@@ -19,6 +19,8 @@
         <div class="input-box">
           <input id="input-email" placeholder="이메일을 입력해주세요." />
         </div>
+        <span class="blank-email-msg hidden">이메일을 입력해주세요.</span>
+        <span class="invalid-email-msg hidden">잘못된 이메일 형식입니다.</span>
       </form>
       <form class="login-form">
         <label for="input-password">비밀번호</label>
@@ -26,8 +28,10 @@
           <input id="input-password" type="password" placeholder="비밀번호를 입력해주세요." />
           <img id="visibility-icon" src="img/btn_visibility_off.png" alt="visibility" />  
         </div>
+        <span class="blank-psw-msg hidden">비밀번호를 입력해주세요.</span>
+        <span class="invalid-psw-msg hidden">비밀번호를 8자 이상 입력해주세요.</span>
       </form>
-      <button id="login-btn" onclick="location.href='index.html'">
+      <button id="login-btn" onclick="location.href='items.html'">
         로그인
       </button>
       <div id="social-login">
@@ -44,5 +48,6 @@
       </div>
     </div>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>
