@@ -2,6 +2,7 @@
 const signupInputFields = {
   email: {
     input: document.querySelector("#input-email"),
+    status: "",
     messages: {
       blank: document.querySelector(".blank-email-msg"),
       invalid: document.querySelector(".invalid-email-msg"),
@@ -10,12 +11,14 @@ const signupInputFields = {
   },
   nickname: {
     input: document.querySelector("#input-nickname"),
+    status: "",
     message: {
       blank: document.querySelector(".blank-nickname-msg")
     },
   },
   password: {
     input: document.querySelector("#input-password"),
+    status: "",
     messages: {
       blank: document.querySelector(".blank-psw-msg"),
       invalid: document.querySelector(".invalid-psw-msg"),
@@ -24,6 +27,7 @@ const signupInputFields = {
   },
   passwordCheck: {
     input: document.querySelector("#input-password-check"),
+    status: "",
     message: {
       invalid: document.querySelector(".not-match-psw-msg")
     },
@@ -33,28 +37,51 @@ const signupInputFields = {
 
 // 상태가 바뀌는 조건
 function getEmailStatus(inputContent) {
-  if (!inputContent) return "blank";
-  if (!signupInputFields.email.pattern.test(inputContent)) return "invalid";
+  if (!inputContent) {
+    signupInputFields.email.status = "blank";
+    return "blank";
+  }
+  if (!signupInputFields.email.pattern.test(inputContent)) {
+    signupInputFields.email.status = "invalid";
+    return "invalid";
+  }
+  signupInputFields.email.status = "valid";
   return "valid";
 }
 
 function getNicknameStatus(inputContent) {
-  if (!inputContent) return "blank";
+  if (!inputContent) {
+    signupInputFields.nickname.status = "blank";
+    return "blank";
+  }
+  signupInputFields.nickname.status = "valid";
   return "valid";
 }
 
 function getPasswordStatus(inputContent) {
-  if (!inputContent) return "blank";
-  if (!signupInputFields.password.pattern.test(inputContent)) return "invalid";
+  if (!inputContent) {
+    signupInputFields.password.status = "blank";
+    return "blank";
+  }
+  if (!signupInputFields.password.pattern.test(inputContent)) {
+    signupInputFields.password.status = "invalid";
+    return "invalid";
+  }
+  signupInputFields.password.status = "valid";
   return "valid";
 }
 
 function getPasswordCheckStatus(inputContent) {
-  if (!signupInputFields.passwordCheck.pattern(inputContent)) return "invalid";  // 흠...
+  if (!signupInputFields.passwordCheck.pattern(inputContent)) {
+    signupInputFields.passwordCheck.status = "invalid";
+    return "invalid";  // 흠...
+  }
+  signupInputFields.passwordCheck.status = "valid";
   return "valid";
 }
 
-// 상태 정의
+
+// 상태에 대한 스타일 정의
 const emailStatusConfig = {
   blank: {
     class: "error",
@@ -126,8 +153,29 @@ function applyStatus(config, e) {
     (Array.isArray(config.hide) ? config.hide : [config.hide]).forEach(el => el.classList.add("hidden"));
   }
 }
+// 메인 함수 - 상태 업데이트
+function updateEmailInputStatus(e) {
+  const inputContent = e.target.value;
+  getEmailStatus(inputContent);
+}
 
-// 메인 함수
+function updateNicknameInputStatus(e) {
+  const inputContent = e.target.value;
+  getNicknameStatus(inputContent);
+}
+
+function updatePasswordInputStatus(e) {
+  const inputContent = e.target.value;
+  getPasswordStatus(inputContent);
+}
+
+function updatePasswordCheckInputStatus(e) {
+  const inputContent = e.target.value;
+  getPasswordCheckStatus(inputContent);
+}
+
+
+// 메인 함수 - 에러 스타일 업데이트
 function emailInputErrors(e) {
   const inputContent = e.target.value;
   const status = getEmailStatus(inputContent);  // 상태
@@ -153,37 +201,60 @@ function passwordCheckInputErrors(e) {
 }
 
 // 이벤트 리스너
+signupInputFields.email.input.addEventListener("input", updateEmailInputStatus);
+signupInputFields.nickname.input.addEventListener("input", updateNicknameInputStatus);
+signupInputFields.password.input.addEventListener("input", updatePasswordInputStatus);
+signupInputFields.passwordCheck.input.addEventListener("input", updatePasswordCheckInputStatus);
+
 signupInputFields.email.input.addEventListener("blur", emailInputErrors);
 signupInputFields.nickname.input.addEventListener("blur", nicknameInputErrors);
 signupInputFields.password.input.addEventListener("blur", passwordInputErrors);
 signupInputFields.passwordCheck.input.addEventListener("blur", passwordCheckInputErrors);
 
 // signupBtn
-const signupBtn = document.querySelector("#signup-btn");
-function getSignupBtnStatus() {
-
+const signupBtn = {
+  element: document.querySelector("#signup-btn"),
+  status: "invalid",
 }
-// const loginBtnStatus = {
-//   valid: function () {
-//     loginBtn.classList.add("vaild");
-//     loginBtn.disabled = false;
-//   },
-//   invalid: function () {
-//     loginBtn.classList.remove("vaild");
-//     loginBtn.disabled = true;
-//   }
-// }
-// function isLoginValid() {
-//   return signupInputFields.email.pattern.test(signupInputFields.email.input.value) && signupInputFields.email.input.value.length >= 8;
-// }
 
-// function changeStatusLoginBtn() {
-//   if (isLoginValid()) {
-//     loginBtnStatus.valid();
-//   } else {
-//     loginBtnStatus.invalid();
-//   }
-// }
+signupBtn.element.disabled = true;
 
-// signupInputFields.email.input.addEventListener("input", changeStatusLoginBtn);
-// signupInputFields.password.input.addEventListener("input", changeStatusLoginBtn);
+function getSignupBtnStatus() {
+  const emailValid = signupInputFields.email.status === "valid";
+  console.log("email:", emailValid);
+  const nicknameValid = signupInputFields.nickname.status === "valid";
+  const passwordValid = signupInputFields.password.status === "valid";
+  const passwordCheckValid = signupInputFields.passwordCheck.status === "valid";
+  if (emailValid && nicknameValid && passwordValid && passwordCheckValid) {
+    signupBtn.status = "valid"
+  } else {
+    signupBtn.status = "invalid"
+  }
+}
+
+const signupBtnStatusConfig = {
+  valid: {
+    class: "valid",
+    disable: false
+  },
+  invalid: {
+    removeClass: "valid",
+    disable: true
+  }
+}
+
+function applySignupBtnStatus(config) {
+  if (config.class) signupBtn.element.classList.add(config.class);
+  if (config.removeClass) signupBtn.element.classList.remove(config.removeClass);
+  if (!config.disabled) signupBtn.element.disabled = false;
+}
+
+function changeSignupBtnStatus() {
+  const btnStatus = getSignupBtnStatus();
+  applySignupBtnStatus(signupBtnStatusConfig[signupBtn.status]);
+}
+
+signupInputFields.email.input.addEventListener("input", changeSignupBtnStatus);
+signupInputFields.nickname.input.addEventListener("input", changeSignupBtnStatus);
+signupInputFields.password.input.addEventListener("input", changeSignupBtnStatus);
+signupInputFields.passwordCheck.input.addEventListener("input", changeSignupBtnStatus);
