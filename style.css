@@ -331,7 +331,7 @@ footer a {
 
 .blank-email-msg, .blank-psw-msg, .blank-nickname-msg,
 .invalid-email-msg, .invalid-psw-msg,
-.psw-check-msg {
+.not-match-psw-msg {
   display: block;
   font-size: 1.5rem;
   font-weight: 600;

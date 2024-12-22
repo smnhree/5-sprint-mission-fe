@@ -1,18 +1,18 @@
 // input, message, pattern
-const loginSignupInputFields = {
+const signupInputFields = {
   email: {
     input: document.querySelector("#input-email"),
     messages: {
       blank: document.querySelector(".blank-email-msg"),
       invalid: document.querySelector(".invalid-email-msg"),
     },
-    pattern: /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+$/, // 이메일 패턴
+    pattern: /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+$/ // 이메일 패턴
   },
   nickname: {
     input: document.querySelector("#input-nickname"),
     message: {
       blank: document.querySelector(".blank-nickname-msg")
-    }
+    },
   },
   password: {
     input: document.querySelector("#input-password"),
@@ -27,67 +27,50 @@ const loginSignupInputFields = {
     message: {
       invalid: document.querySelector(".not-match-psw-msg")
     },
-    pattern: (value) => value === loginSignupInputFields.password.input.value // 흠...
+    pattern: (value) => value === signupInputFields.password.input.value, // 흠...
   },
 };
 
-const loginSignupBtnFields = {
-  login: {
-    button: document.querySelector("#login-btn"),
-  },
-  signup: {
-    button: document.querySelector("#signup-btn")
-  }
-}
-
 // 상태가 바뀌는 조건
 function getEmailStatus(inputContent) {
-  if (inputContent === "") return "blank";
-  if (!loginSignupInputFields.email.pattern.test(inputContent)) return "invalid";
+  if (!inputContent) return "blank";
+  if (!signupInputFields.email.pattern.test(inputContent)) return "invalid";
   return "valid";
 }
 
 function getNicknameStatus(inputContent) {
-  if (inputContent === "") return "blank";
+  if (!inputContent) return "blank";
   return "valid";
 }
 
 function getPasswordStatus(inputContent) {
-  if (inputContent === "") return "blank";
-  if (!loginSignupInputFields.password.pattern.test(inputContent)) return "invalid";
+  if (!inputContent) return "blank";
+  if (!signupInputFields.password.pattern.test(inputContent)) return "invalid";
   return "valid";
 }
 
 function getPasswordCheckStatus(inputContent) {
-  if (!loginSignupInputFields.passwordCheck.pattern(inputContent)) return "invalid";  // 흠...
+  if (!signupInputFields.passwordCheck.pattern(inputContent)) return "invalid";  // 흠...
   return "valid";
 }
-
-// function getLoginBtnStatus() {
-//   if ()
-// }
-
-// function getSignupBtnStatus() {
-
-// }
 
 // 상태 정의
 const emailStatusConfig = {
   blank: {
     class: "error",
-    hide: loginSignupInputFields.email.messages.invalid,
-    show: loginSignupInputFields.email.messages.blank
+    hide: signupInputFields.email.messages.invalid,
+    show: signupInputFields.email.messages.blank
   },
   invalid: {
     class: "error",
-    hide: loginSignupInputFields.email.messages.blank,
-    show: loginSignupInputFields.email.messages.invalid
+    hide: signupInputFields.email.messages.blank,
+    show: signupInputFields.email.messages.invalid
   },
   valid: {
     removeClass: "error",
     hide: [
-      loginSignupInputFields.email.messages.blank,
-      loginSignupInputFields.email.messages.invalid
+      signupInputFields.email.messages.blank,
+      signupInputFields.email.messages.invalid
     ]
   },
 };
@@ -95,30 +78,30 @@ const emailStatusConfig = {
 const nicknameStatusConfig = {
   blank: {
     class: "error",
-    show: loginSignupInputFields.nickname.message.blank
+    show: signupInputFields.nickname.message.blank
   },
   valid: {
     removeClass: "error",
-    hide: loginSignupInputFields.nickname.message.blank
+    hide: signupInputFields.nickname.message.blank
   }
 }
 
 const passwordStatusConfig = {
   blank: {
     class: "error",
-    hide: loginSignupInputFields.password.messages.invalid,
-    show: loginSignupInputFields.password.messages.blank
+    hide: signupInputFields.password.messages.invalid,
+    show: signupInputFields.password.messages.blank
   },
   invalid: {
     class: "error",
-    hide: loginSignupInputFields.password.messages.blank,
-    show: loginSignupInputFields.password.messages.invalid
+    hide: signupInputFields.password.messages.blank,
+    show: signupInputFields.password.messages.invalid
   },
   valid: {
     removeClass: "error",
     hide: [
-      loginSignupInputFields.password.messages.blank,
-      loginSignupInputFields.password.messages.invalid
+      signupInputFields.password.messages.blank,
+      signupInputFields.password.messages.invalid
     ]
   },
 }
@@ -126,11 +109,11 @@ const passwordStatusConfig = {
 const passwordCheckStatusConfig = {
   invalid: {
     class: "error",
-    show: loginSignupInputFields.passwordCheck.message.invalid
+    show: signupInputFields.passwordCheck.message.invalid
   },
   valid: {
     removeClass: "error",
-    hide: loginSignupInputFields.passwordCheck.message.invalid
+    hide: signupInputFields.passwordCheck.message.invalid
   },
 }
 
@@ -154,7 +137,6 @@ function emailInputErrors(e) {
 function nicknameInputErrors(e) {
   const inputContent = e.target.value;
   const status = getNicknameStatus(inputContent);
-  console.log(nicknameStatusConfig[status]);
   applyStatus(nicknameStatusConfig[status], e);
 }
 
@@ -171,35 +153,37 @@ function passwordCheckInputErrors(e) {
 }
 
 // 이벤트 리스너
-loginSignupInputFields.email.input.addEventListener("blur", emailInputErrors);
-// loginSignupInputFields.nickname.input.addEventListener("blur", nicknameInputErrors);
-loginSignupInputFields.password.input.addEventListener("blur", passwordInputErrors);
-// loginSignupInputFields.passwordCheck.input.addEventListener("blur", passwordCheckInputErrors);
+signupInputFields.email.input.addEventListener("blur", emailInputErrors);
+signupInputFields.nickname.input.addEventListener("blur", nicknameInputErrors);
+signupInputFields.password.input.addEventListener("blur", passwordInputErrors);
+signupInputFields.passwordCheck.input.addEventListener("blur", passwordCheckInputErrors);
 
-// loginBtn
-// 상태 변화
-const loginBtn = document.querySelector("#login-btn");
-const loginBtnStatus = {
-  valid: function () {
-    loginBtn.classList.add("vaild");
-    loginBtn.disabled = false;
-  },
-  invalid: function () {
-    loginBtn.classList.remove("vaild");
-    loginBtn.disabled = true;
-  }
-}
-function isLoginValid() {
-  return loginSignupInputFields.email.pattern.test(loginSignupInputFields.email.input.value) && loginSignupInputFields.email.input.value.length >= 8;
-}
+// signupBtn
+const signupBtn = document.querySelector("#signup-btn");
+function getSignupBtnStatus() {
 
-function changeStatusLoginBtn() {
-  if (isLoginValid()) {
-    loginBtnStatus.valid();
-  } else {
-    loginBtnStatus.invalid();
-  }
 }
+// const loginBtnStatus = {
+//   valid: function () {
+//     loginBtn.classList.add("vaild");
+//     loginBtn.disabled = false;
+//   },
+//   invalid: function () {
+//     loginBtn.classList.remove("vaild");
+//     loginBtn.disabled = true;
+//   }
+// }
+// function isLoginValid() {
+//   return signupInputFields.email.pattern.test(signupInputFields.email.input.value) && signupInputFields.email.input.value.length >= 8;
+// }
 
-loginSignupInputFields.email.input.addEventListener("input", changeStatusLoginBtn);
-loginSignupInputFields.password.input.addEventListener("input", changeStatusLoginBtn);
+// function changeStatusLoginBtn() {
+//   if (isLoginValid()) {
+//     loginBtnStatus.valid();
+//   } else {
+//     loginBtnStatus.invalid();
+//   }
+// }
+
+// signupInputFields.email.input.addEventListener("input", changeStatusLoginBtn);
+// signupInputFields.password.input.addEventListener("input", changeStatusLoginBtn);
