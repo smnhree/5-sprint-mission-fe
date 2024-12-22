@@ -1,4 +1,19 @@
 // input, message, pattern
+
+/*
+- getEmaiilStatus, getNicknameStatus, ... -> get만 할 것, set 따로 만들 것
+  - (Optional) getFieldStatus(fieldName)로 단일 함수 만들 것
+  - setFieldStatus(fieldName, inputContent)
+
+- updateEmailInputStatus, updateNicknameInputStatus, ... 
+  -> 위에서 만든 setFieldStatus사용하는 하나의 함수로 작성할 것, ex) updateFieldByEvent(fieldName, e)
+
+- emailInputErrors(e), nicknameInputErrors(e), ...
+  -> updateFieldStyleByEvent(fieldName, e)
+
+- getSignupBtnStatus -> set으로 변경
+*/
+
 const signupInputFields = {
   email: {
     input: document.querySelector("#input-email"),
@@ -15,6 +30,9 @@ const signupInputFields = {
     message: {
       blank: document.querySelector(".blank-nickname-msg")
     },
+    pattern: {
+      test: () => true  // 항상 pattern 테스트 통과(=제한없다는 의미)
+    }
   },
   password: {
     input: document.querySelector("#input-password"),
@@ -31,55 +49,29 @@ const signupInputFields = {
     message: {
       invalid: document.querySelector(".not-match-psw-msg")
     },
-    pattern: (value) => value === signupInputFields.password.input.value, // 흠...
+    pattern: {
+      test: (value) => value === signupInputFields.password.input.value, // 흠...
+    }
   },
 };
 
 // 상태가 바뀌는 조건
-function getEmailStatus(inputContent) {
+
+function setFieldStatus(fieldName, inputContent) {
   if (!inputContent) {
-    signupInputFields.email.status = "blank";
-    return "blank";
+    signupInputFields[fieldName].status = "blank";
   }
-  if (!signupInputFields.email.pattern.test(inputContent)) {
-    signupInputFields.email.status = "invalid";
-    return "invalid";
+  else if (!signupInputFields[fieldName].pattern.test(inputContent)) {
+    signupInputFields[fieldName].status = "invalid";
   }
-  signupInputFields.email.status = "valid";
-  return "valid";
+  else {
+    signupInputFields[fieldName].status = "valid";
+  }
 }
 
-function getNicknameStatus(inputContent) {
-  if (!inputContent) {
-    signupInputFields.nickname.status = "blank";
-    return "blank";
-  }
-  signupInputFields.nickname.status = "valid";
-  return "valid";
+function getFieldStatus(fieldName) {
+  return signupInputFields[fieldName].status
 }
-
-function getPasswordStatus(inputContent) {
-  if (!inputContent) {
-    signupInputFields.password.status = "blank";
-    return "blank";
-  }
-  if (!signupInputFields.password.pattern.test(inputContent)) {
-    signupInputFields.password.status = "invalid";
-    return "invalid";
-  }
-  signupInputFields.password.status = "valid";
-  return "valid";
-}
-
-function getPasswordCheckStatus(inputContent) {
-  if (!signupInputFields.passwordCheck.pattern(inputContent)) {
-    signupInputFields.passwordCheck.status = "invalid";
-    return "invalid";  // 흠...
-  }
-  signupInputFields.passwordCheck.status = "valid";
-  return "valid";
-}
-
 
 // 상태에 대한 스타일 정의
 const emailStatusConfig = {
@@ -144,6 +136,18 @@ const passwordCheckStatusConfig = {
   },
 }
 
+function getConfigByFieldName(fieldName) {
+  if (fieldName === "email") {
+    return emailStatusConfig;
+  } else if (fieldName === "nickname") {
+    return nicknameStatusConfig;
+  } else if (fieldName === "password") {
+    return passwordStatusConfig;
+  } else if (fieldName === "passwordCheck") {
+    return passwordCheckStatusConfig;
+  }
+}
+
 // class 업데이트 -> 스타일 변경 함수
 function applyStatus(config, e) {
   if (config.class) e.target.classList.add(config.class);
@@ -154,62 +158,28 @@ function applyStatus(config, e) {
   }
 }
 // 메인 함수 - 상태 업데이트
-function updateEmailInputStatus(e) {
+function updateFieldByEvent(fieldName, e) {
   const inputContent = e.target.value;
-  getEmailStatus(inputContent);
+  setFieldStatus(fieldName, inputContent);
 }
-
-function updateNicknameInputStatus(e) {
-  const inputContent = e.target.value;
-  getNicknameStatus(inputContent);
-}
-
-function updatePasswordInputStatus(e) {
-  const inputContent = e.target.value;
-  getPasswordStatus(inputContent);
-}
-
-function updatePasswordCheckInputStatus(e) {
-  const inputContent = e.target.value;
-  getPasswordCheckStatus(inputContent);
-}
-
+signupInputFields.email.input.addEventListener("input", (e) => updateFieldByEvent("email", e));
+signupInputFields.nickname.input.addEventListener("input", (e) => updateFieldByEvent("nickname", e));
+signupInputFields.password.input.addEventListener("input", (e) => updateFieldByEvent("password", e));
+signupInputFields.passwordCheck.input.addEventListener("input", (e) => updateFieldByEvent("passwordCheck", e));
 
 // 메인 함수 - 에러 스타일 업데이트
-function emailInputErrors(e) {
-  const inputContent = e.target.value;
-  const status = getEmailStatus(inputContent);  // 상태
-  applyStatus(emailStatusConfig[status], e);  // 동작(classList 조작 -> style 변경)
-}
-
-function nicknameInputErrors(e) {
-  const inputContent = e.target.value;
-  const status = getNicknameStatus(inputContent);
-  applyStatus(nicknameStatusConfig[status], e);
-}
-
-function passwordInputErrors(e) {
-  const inputContent = e.target.value;
-  const status = getPasswordStatus(inputContent);
-  applyStatus(passwordStatusConfig[status], e);
-}
-
-function passwordCheckInputErrors(e) {
-  const inputContent = e.target.value;
-  const status = getPasswordCheckStatus(inputContent);
-  applyStatus(passwordCheckStatusConfig[status], e);
+function updateFieldStyleByEvent(fieldName, e) {
+  setFieldStatus(fieldName, e.target.value);
+  const status = getFieldStatus(fieldName);
+  const config = getConfigByFieldName(fieldName);
+  applyStatus(config[status], e);
 }
 
 // 이벤트 리스너
-signupInputFields.email.input.addEventListener("input", updateEmailInputStatus);
-signupInputFields.nickname.input.addEventListener("input", updateNicknameInputStatus);
-signupInputFields.password.input.addEventListener("input", updatePasswordInputStatus);
-signupInputFields.passwordCheck.input.addEventListener("input", updatePasswordCheckInputStatus);
-
-signupInputFields.email.input.addEventListener("blur", emailInputErrors);
-signupInputFields.nickname.input.addEventListener("blur", nicknameInputErrors);
-signupInputFields.password.input.addEventListener("blur", passwordInputErrors);
-signupInputFields.passwordCheck.input.addEventListener("blur", passwordCheckInputErrors);
+signupInputFields.email.input.addEventListener("blur", (e) => updateFieldStyleByEvent("email", e));
+signupInputFields.nickname.input.addEventListener("blur", (e) => updateFieldStyleByEvent("nickname", e));
+signupInputFields.password.input.addEventListener("blur", (e) => updateFieldStyleByEvent("password", e));
+signupInputFields.passwordCheck.input.addEventListener("blur", (e) => updateFieldStyleByEvent("passwordCheck", e));
 
 // signupBtn
 const signupBtn = {
@@ -219,9 +189,8 @@ const signupBtn = {
 
 signupBtn.element.disabled = true;
 
-function getSignupBtnStatus() {
+function setSignupBtnStatus() {
   const emailValid = signupInputFields.email.status === "valid";
-  console.log("email:", emailValid);
   const nicknameValid = signupInputFields.nickname.status === "valid";
   const passwordValid = signupInputFields.password.status === "valid";
   const passwordCheckValid = signupInputFields.passwordCheck.status === "valid";
@@ -250,7 +219,7 @@ function applySignupBtnStatus(config) {
 }
 
 function changeSignupBtnStatus() {
-  const btnStatus = getSignupBtnStatus();
+  setSignupBtnStatus();
   applySignupBtnStatus(signupBtnStatusConfig[signupBtn.status]);
 }
 
