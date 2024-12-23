@@ -356,7 +356,7 @@ footer a {
   color: var(--secondary-color-100);
 }
 
-#login-btn.vaild, #signup-btn.valid {
+#login-btn.valid, #signup-btn.valid {
   background-color: var(--primary-color-100);
 }
 

@@ -1,27 +1,162 @@
-// loginBtn
-// 상태 변화
-const loginBtn = document.querySelector("#login-btn");
-const loginBtnStatus = {
-  valid: function () {
-    loginBtn.classList.add("vaild");
-    loginBtn.disabled = false;
+const loginInputFields = {
+  email: {
+    input: document.querySelector("#input-email"),
+    status: "",
+    messages: {
+      blank: document.querySelector(".blank-email-msg"),
+      invalid: document.querySelector(".invalid-email-msg"),
+    },
+    pattern: /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+$/ // 이메일 패턴
   },
-  invalid: function () {
-    loginBtn.classList.remove("vaild");
-    loginBtn.disabled = true;
+  password: {
+    input: document.querySelector("#input-password"),
+    status: "",
+    messages: {
+      blank: document.querySelector(".blank-psw-msg"),
+      invalid: document.querySelector(".invalid-psw-msg"),
+    },
+    pattern: /^.{8,}$/, // 비밀번호는 8자 이상
+  }
+};
+
+// 상태 설정
+function setFieldStatus(fieldName, inputContent) {
+  if (!inputContent) {
+    loginInputFields[fieldName].status = "blank";
+  }
+  else if (!loginInputFields[fieldName].pattern.test(inputContent)) {
+    loginInputFields[fieldName].status = "invalid";
+  }
+  else {
+    loginInputFields[fieldName].status = "valid";
   }
 }
-function isLoginValid() {
-  return signupInputFields.email.pattern.test(signupInputFields.email.input.value) && signupInputFields.email.input.value.length >= 8;
+
+function getFieldStatus(fieldName) {
+  return loginInputFields[fieldName].status
 }
 
-function changeStatusLoginBtn() {
-  if (isLoginValid()) {
-    loginBtnStatus.valid();
+// 상태에 대한 스타일 정의
+const emailStatusConfig = {
+  blank: {
+    class: "error",
+    hide: loginInputFields.email.messages.invalid,
+    show: loginInputFields.email.messages.blank
+  },
+  invalid: {
+    class: "error",
+    hide: loginInputFields.email.messages.blank,
+    show: loginInputFields.email.messages.invalid
+  },
+  valid: {
+    removeClass: "error",
+    hide: [
+      loginInputFields.email.messages.blank,
+      loginInputFields.email.messages.invalid
+    ]
+  },
+};
+
+const passwordStatusConfig = {
+  blank: {
+    class: "error",
+    hide: loginInputFields.password.messages.invalid,
+    show: loginInputFields.password.messages.blank
+  },
+  invalid: {
+    class: "error",
+    hide: loginInputFields.password.messages.blank,
+    show: loginInputFields.password.messages.invalid
+  },
+  valid: {
+    removeClass: "error",
+    hide: [
+      loginInputFields.password.messages.blank,
+      loginInputFields.password.messages.invalid
+    ]
+  },
+}
+
+function getConfigByFieldName(fieldName) {
+  if (fieldName === "email") {
+    return emailStatusConfig;
+  } else if (fieldName === "password") {
+    return passwordStatusConfig;
+  }
+}
+
+// class 업데이트 -> 스타일 변경 함수
+function applyStatus(config, e) {
+  if (config.class) e.target.classList.add(config.class);
+  if (config.removeClass) e.target.classList.remove(config.removeClass);
+  if (config.show) config.show.classList.remove("hidden");
+  if (config.hide) {
+    (Array.isArray(config.hide) ? config.hide : [config.hide]).forEach(el => el.classList.add("hidden"));
+  }
+}
+// 메인 함수 - 상태 업데이트
+function updateFieldByEvent(fieldName, e) {
+  const inputContent = e.target.value;
+  setFieldStatus(fieldName, inputContent);
+}
+
+// 메인 함수 - 스타일 업데이트
+function updateFieldStyleByEvent(fieldName, e) {
+  setFieldStatus(fieldName, e.target.value);
+  const status = getFieldStatus(fieldName);
+  const config = getConfigByFieldName(fieldName);
+  applyStatus(config[status], e);
+}
+
+// 이벤트 리스너
+// 상태 업데이트
+loginInputFields.email.input.addEventListener("input", (e) => updateFieldByEvent("email", e));
+loginInputFields.password.input.addEventListener("input", (e) => updateFieldByEvent("password", e));
+// 스타일 업데이트
+loginInputFields.email.input.addEventListener("blur", (e) => updateFieldStyleByEvent("email", e));
+loginInputFields.password.input.addEventListener("blur", (e) => updateFieldStyleByEvent("password", e));
+
+// loginBtn
+const loginBtn = {
+  element: document.querySelector("#login-btn"),
+  status: "invalid",
+}
+
+loginBtn.element.disabled = true;
+
+function setloginBtnStatus() {
+  const emailValid = loginInputFields.email.status === "valid";
+  const passwordValid = loginInputFields.password.status === "valid";
+  if (emailValid && passwordValid) {
+    loginBtn.status = "valid"
   } else {
-    loginBtnStatus.invalid();
+    loginBtn.status = "invalid"
   }
 }
 
-signupInputFields.email.input.addEventListener("input", changeStatusLoginBtn);
-signupInputFields.password.input.addEventListener("input", changeStatusLoginBtn);
+const loginBtnStatusConfig = {
+  valid: {
+    class: "valid",
+    disable: false
+  },
+  invalid: {
+    removeClass: "valid",
+    disable: true
+  }
+}
+
+function applyloginBtnStatus(config) {
+  if (config.class) loginBtn.element.classList.add(config.class);
+  if (config.removeClass) loginBtn.element.classList.remove(config.removeClass);
+  if (!config.disabled) loginBtn.element.disabled = false;
+}
+
+function changeloginBtnStatus() {
+  setloginBtnStatus();
+  applyloginBtnStatus(loginBtnStatusConfig[loginBtn.status]);
+}
+
+loginInputFields.email.input.addEventListener("input", changeloginBtnStatus);
+loginInputFields.password.input.addEventListener("input", changeloginBtnStatus);
+
+// 

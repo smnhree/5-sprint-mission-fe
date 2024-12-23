@@ -55,8 +55,7 @@ const signupInputFields = {
   },
 };
 
-// 상태가 바뀌는 조건
-
+// 상태 설정
 function setFieldStatus(fieldName, inputContent) {
   if (!inputContent) {
     signupInputFields[fieldName].status = "blank";
@@ -162,12 +161,8 @@ function updateFieldByEvent(fieldName, e) {
   const inputContent = e.target.value;
   setFieldStatus(fieldName, inputContent);
 }
-signupInputFields.email.input.addEventListener("input", (e) => updateFieldByEvent("email", e));
-signupInputFields.nickname.input.addEventListener("input", (e) => updateFieldByEvent("nickname", e));
-signupInputFields.password.input.addEventListener("input", (e) => updateFieldByEvent("password", e));
-signupInputFields.passwordCheck.input.addEventListener("input", (e) => updateFieldByEvent("passwordCheck", e));
 
-// 메인 함수 - 에러 스타일 업데이트
+// 메인 함수 - 스타일 업데이트
 function updateFieldStyleByEvent(fieldName, e) {
   setFieldStatus(fieldName, e.target.value);
   const status = getFieldStatus(fieldName);
@@ -176,6 +171,12 @@ function updateFieldStyleByEvent(fieldName, e) {
 }
 
 // 이벤트 리스너
+// 상태 업데이트
+signupInputFields.email.input.addEventListener("input", (e) => updateFieldByEvent("email", e));
+signupInputFields.nickname.input.addEventListener("input", (e) => updateFieldByEvent("nickname", e));
+signupInputFields.password.input.addEventListener("input", (e) => updateFieldByEvent("password", e));
+signupInputFields.passwordCheck.input.addEventListener("input", (e) => updateFieldByEvent("passwordCheck", e));
+// 스타일 업데이트
 signupInputFields.email.input.addEventListener("blur", (e) => updateFieldStyleByEvent("email", e));
 signupInputFields.nickname.input.addEventListener("blur", (e) => updateFieldStyleByEvent("nickname", e));
 signupInputFields.password.input.addEventListener("blur", (e) => updateFieldStyleByEvent("password", e));
@@ -227,3 +228,5 @@ signupInputFields.email.input.addEventListener("input", changeSignupBtnStatus);
 signupInputFields.nickname.input.addEventListener("input", changeSignupBtnStatus);
 signupInputFields.password.input.addEventListener("input", changeSignupBtnStatus);
 signupInputFields.passwordCheck.input.addEventListener("input", changeSignupBtnStatus);
+
+// 
