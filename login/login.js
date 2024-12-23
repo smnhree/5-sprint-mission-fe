@@ -1,3 +1,4 @@
+// todo: CORS 오류 해결
 // import { USER_DATA } from "../data/userData"; CORS 오류 뜸
 
 const loginInputFields = {
@@ -162,7 +163,8 @@ function changeloginBtnStatus() {
 loginInputFields.email.input.addEventListener("input", changeloginBtnStatus);
 loginInputFields.password.input.addEventListener("input", changeloginBtnStatus);
 
-// alert 메시지
+// 모달
+// todo: CORS 해결 후 USER_DATA array 삭제
 const USER_DATA = [
   {email: 'codeit1@codeit.com', password: "codeit101!"},
   {email: 'codeit2@codeit.com', password: "codeit202!"},

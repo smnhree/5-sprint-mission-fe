@@ -1,5 +1,3 @@
-// input, message, pattern
-
 /*
 - getEmaiilStatus, getNicknameStatus, ... -> get만 할 것, set 따로 만들 것
   - (Optional) getFieldStatus(fieldName)로 단일 함수 만들 것
@@ -13,6 +11,9 @@
 
 - getSignupBtnStatus -> set으로 변경
 */
+
+// todo: CORS 오류 해결
+// import { USER_DATA } from "../data/userData"; CORS 오류 뜸
 
 const signupInputFields = {
   email: {
@@ -229,4 +230,47 @@ signupInputFields.nickname.input.addEventListener("input", changeSignupBtnStatus
 signupInputFields.password.input.addEventListener("input", changeSignupBtnStatus);
 signupInputFields.passwordCheck.input.addEventListener("input", changeSignupBtnStatus);
 
-// 
+// 모달
+// todo: CORS 해결 후 USER_DATA array 삭제
+const USER_DATA = [
+  {email: 'codeit1@codeit.com', password: "codeit101!"},
+  {email: 'codeit2@codeit.com', password: "codeit202!"},
+  {email: 'codeit3@codeit.com', password: "codeit303!"},
+  {email: 'codeit4@codeit.com', password: "codeit404!"},
+  {email: 'codeit5@codeit.com', password: "codeit505!"},
+  {email: 'codeit6@codeit.com', password: "codeit606!"}
+]
+
+// 회원가입 가능 여부 판단
+function isSignupValid() {
+  const emailValue = signupInputFields.email.input.value;
+  for (data of USER_DATA) {
+    if(data["email"] === emailValue) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// 메인 함수 - 회원가입 가능 여부에 따라 모달 띄우기
+const signupModal = {
+  modal: document.querySelector(".modal"),
+  modalCloseBtn: document.querySelector(".modal-close-btn")
+}
+
+function showSignupErrorModal(e) {
+  const isValid = isSignupValid();
+  if (!isValid) {
+    e.preventDefault();
+    signupModal.modal.classList.remove("hidden");
+  }
+}
+
+function closeModal(e) {
+  const btnElement = e.target;
+  const modalElement = btnElement.closest(".modal");
+  modalElement.classList.add("hidden");
+}
+
+signupBtn.element.addEventListener("click", showSignupErrorModal);
+signupModal.modalCloseBtn.addEventListener("click", closeModal);
