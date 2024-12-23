@@ -1,3 +1,5 @@
+// import { USER_DATA } from "../data/userData"; CORS 오류 뜸
+
 const loginInputFields = {
   email: {
     input: document.querySelector("#input-email"),
@@ -181,13 +183,25 @@ function isLoginValid() {
   return false;
 }
 
-// 메인 함수 - 버튼, 알람
-function aaa(e) {
-  const bbb = isLoginValid();
-  if (!bbb) {
+// 메인 함수 - 로그인 가능 여부에 따라 모달 띄우기
+const loginModal = {
+  modal: document.querySelector(".modal"),
+  modalCloseBtn: document.querySelector(".modal-close-btn")
+}
+
+function showLoginErrorModal(e) {
+  const isValid = isLoginValid();
+  if (!isValid) {
     e.preventDefault();
-    alert("비밀번호가 일치하지 않습니다.");
+    loginModal.modal.classList.remove("hidden");
   }
 }
 
-loginBtn.element.addEventListener("click", aaa);
+function closeModal(e) {
+  const btnElement = e.target;
+  const modalElement = btnElement.closest(".modal");
+  modalElement.classList.add("hidden");
+}
+
+loginBtn.element.addEventListener("click", showLoginErrorModal);
+loginModal.modalCloseBtn.addEventListener("click", closeModal);
