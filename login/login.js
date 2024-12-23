@@ -159,4 +159,35 @@ function changeloginBtnStatus() {
 loginInputFields.email.input.addEventListener("input", changeloginBtnStatus);
 loginInputFields.password.input.addEventListener("input", changeloginBtnStatus);
 
-// 
+// alert 메시지
+const USER_DATA = [
+  {email: 'codeit1@codeit.com', password: "codeit101!"},
+  {email: 'codeit2@codeit.com', password: "codeit202!"},
+  {email: 'codeit3@codeit.com', password: "codeit303!"},
+  {email: 'codeit4@codeit.com', password: "codeit404!"},
+  {email: 'codeit5@codeit.com', password: "codeit505!"},
+  {email: 'codeit6@codeit.com', password: "codeit606!"}
+]
+
+// 로그인 가능 여부 판단
+function isLoginValid() {
+  const emailValue = loginInputFields.email.input.value;
+  const passwordValue = loginInputFields.password.input.value;
+  for (data of USER_DATA) {
+    if((data["email"] === emailValue) && (data["password"] === passwordValue)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// 메인 함수 - 버튼, 알람
+function aaa(e) {
+  const bbb = isLoginValid();
+  if (!bbb) {
+    e.preventDefault();
+    alert("비밀번호가 일치하지 않습니다.");
+  }
+}
+
+loginBtn.element.addEventListener("click", aaa);

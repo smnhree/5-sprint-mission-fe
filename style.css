@@ -354,6 +354,7 @@ footer a {
   background-color: var(--secondary-color-400);
   font-size: 2rem;
   color: var(--secondary-color-100);
+  text-decoration-line: none;
 }
 
 #login-btn.valid, #signup-btn.valid {
@@ -369,7 +370,6 @@ footer a {
   justify-content: space-between;
   align-items: center;
   padding: 1.6rem 2.3rem;
-
 }
 
 #social-login span {
