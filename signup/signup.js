@@ -128,6 +128,10 @@ const passwordStatusConfig = {
 }
 
 const passwordCheckStatusConfig = {
+  blank: {
+    class: "error",
+    show: signupInputFields.passwordCheck.message.invalid
+  },
   invalid: {
     class: "error",
     show: signupInputFields.passwordCheck.message.invalid
