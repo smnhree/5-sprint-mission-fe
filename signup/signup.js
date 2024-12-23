@@ -43,6 +43,7 @@ const signupInputFields = {
       invalid: document.querySelector(".invalid-psw-msg"),
     },
     pattern: /^.{8,}$/, // 비밀번호는 8자 이상
+    visibility: "off"
   },
   passwordCheck: {
     input: document.querySelector("#input-password-check"),
@@ -52,7 +53,8 @@ const signupInputFields = {
     },
     pattern: {
       test: (value) => value === signupInputFields.password.input.value, // 흠...
-    }
+    },
+    visibility: "off"
   },
 };
 
@@ -274,3 +276,30 @@ function closeModal(e) {
 
 signupBtn.element.addEventListener("click", showSignupErrorModal);
 signupModal.modalCloseBtn.addEventListener("click", closeModal);
+
+// 비밀번호 표시/숨기기 토글
+const passwordVisibilityIcon = {
+  password: {
+    element: document.querySelector(".password-field #visibility-icon"),
+    img: document.querySelector(".password-field #visibility-icon > img")
+  },
+  passwordCheck: {
+    element: document.querySelector(".passwordCheck-field #visibility-icon"),
+    img: document.querySelector(".passwordCheck-field #visibility-icon > img")
+  }
+}
+
+function passwordVisivilityToggle(fieldName, e) {
+  if (signupInputFields[fieldName].visibility === "off") {
+    passwordVisibilityIcon[fieldName].img.src = "../img/btn_visibility_on.png";
+    signupInputFields[fieldName].input.type = "text";
+    signupInputFields[fieldName].visibility = "on";
+  } else if (signupInputFields[fieldName].visibility === "on") {
+    passwordVisibilityIcon[fieldName].img.src = "../img/btn_visibility_off.png";
+    signupInputFields[fieldName].input.type = "password";
+    signupInputFields[fieldName].visibility = "off";
+  }
+}
+
+passwordVisibilityIcon.password.element.addEventListener("click", (e) => passwordVisivilityToggle("password", e));
+passwordVisibilityIcon.passwordCheck.element.addEventListener("click", (e) => passwordVisivilityToggle("passwordCheck", e));

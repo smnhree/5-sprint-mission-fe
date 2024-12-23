@@ -217,7 +217,6 @@ const passwordVisibilityIcon = {
 
 function passwordVisivilityToggle() {
   if (loginInputFields.password.visibility === "off") {
-    console.log("작동되나요");
     passwordVisibilityIcon.img.src = "../img/btn_visibility_on.png";
     loginInputFields.password.input.type = "text";
     loginInputFields.password.visibility = "on";
