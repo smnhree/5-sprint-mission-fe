@@ -34,6 +34,7 @@ button {
   border: 0;
   background-color: transparent;
   cursor: pointer;
+  padding: 0;
 }
 
 button, a {
@@ -344,6 +345,10 @@ footer a {
   position: absolute;
   bottom: 1.5rem;
   right: 2rem;
+}
+
+#visibility-icon img {
+  width: 100%;
 }
 
 #login-btn, #signup-btn {

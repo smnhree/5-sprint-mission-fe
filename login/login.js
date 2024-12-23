@@ -18,6 +18,7 @@ const loginInputFields = {
       invalid: document.querySelector(".invalid-psw-msg"),
     },
     pattern: /^.{8,}$/, // 비밀번호는 8자 이상
+    visibility: "off"
   }
 };
 
@@ -205,3 +206,24 @@ function closeModal(e) {
 
 loginBtn.element.addEventListener("click", showLoginErrorModal);
 loginModal.modalCloseBtn.addEventListener("click", closeModal);
+
+// 비밀번호 표시/숨기기 토글
+const passwordVisibilityIcon = {
+  element: document.querySelector("#visibility-icon"),
+  img: document.querySelector("#visibility-icon > img")
+}
+
+function passwordVisivilityToggle() {
+  if (loginInputFields.password.visibility === "off") {
+    console.log("작동되나요");
+    passwordVisibilityIcon.img.src = "../img/btn_visibility_on.png";
+    loginInputFields.password.input.type = "text";
+    loginInputFields.password.visibility = "on";
+  } else if (loginInputFields.password.visibility === "on") {
+    passwordVisibilityIcon.img.src = "../img/btn_visibility_off.png";
+    loginInputFields.password.input.type = "password";
+    loginInputFields.password.visibility = "off";
+  }
+}
+
+passwordVisibilityIcon.element.addEventListener("click", passwordVisivilityToggle);
