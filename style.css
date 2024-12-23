@@ -82,6 +82,7 @@ header {
   justify-content: space-between;
   align-items: center;
   max-width: 112rem;
+  width: 100%;
   min-width: 30rem;
   flex-grow: 1;
   margin: 0 20rem;
@@ -112,7 +113,7 @@ header {
 
 .main-welcome-wrap,.main-bottom-wrap {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-end;
   max-width: 111rem;
   width: 90%;
@@ -123,16 +124,21 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 40%;
+  align-items: center;
   padding-bottom: 7%;
   gap: 2rem;
 }
 
+.main-welcome-conts p {
+  width: 80%;
+}
+
 .main-welcome-wrap > img {
-  width: 60%;
+  width: 60%;  /* todo: 이미지 크기 다른 방식으로 */
 }
 
 #main-visit-btn {
+  max-width: 35.7rem;
   width: 90%;
   height: 5.6rem;
   border-radius: 40rem;
@@ -264,7 +270,7 @@ footer a {
 
 #login-wrap, #signup-wrap {
   box-sizing: border-box;
-  padding: 23.1rem 2rem;
+  padding: 23.1rem 1.6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -455,4 +461,46 @@ footer a {
 
 .hidden {
   display: none;
+}
+
+/* index.js 미디어쿼리 */
+@media (max-width: 1199px) {
+  #header-wrap {
+    margin: 0 2.4rem;
+  }
+  .main-welcome-wrap,.main-bottom-wrap {
+    flex-direction: column;
+    align-items: center;
+  }
+  .main-welcome-conts {
+    width: 100%;
+    align-items: center;
+  }
+  
+  .main-welcome-conts p {
+    height: 100%;
+    text-align: center;
+  }
+  
+  .main-welcome-wrap > img {
+    height: 100%;
+  }
+}
+
+@media (max-width: 743px) {
+  #header-wrap {
+    margin: 0 1.6rem;
+  }
+}
+
+/* login.js, signup.js 미디어쿼리 */
+@media (max-width: 743px) {
+  #login-logo, #signup-logo {
+    width: 19.8rem;
+    height: 6.6rem;
+  }
+  #login-conts, #signup-conts {
+    width: 100%;
+    max-width: 40rem;
+  }
 }
