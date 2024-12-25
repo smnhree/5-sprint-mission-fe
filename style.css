@@ -257,7 +257,7 @@ footer a {
 
 #login-wrap, #signup-wrap {
   box-sizing: border-box;
-  padding: 23.1rem 1.6rem;
+  padding: 5% 1.6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
