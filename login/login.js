@@ -126,8 +126,6 @@ const loginBtn = {
   status: "invalid",
 }
 
-loginBtn.element.disabled = true;
-
 function setloginBtnStatus() {
   const emailValid = loginInputFields.email.status === "valid";
   const passwordValid = loginInputFields.password.status === "valid";
@@ -152,7 +150,6 @@ const loginBtnStatusConfig = {
 function applyloginBtnStatus(config) {
   if (config.class) loginBtn.element.classList.add(config.class);
   if (config.removeClass) loginBtn.element.classList.remove(config.removeClass);
-  if (!config.disabled) loginBtn.element.disabled = false;
 }
 
 function changeloginBtnStatus() {
@@ -186,18 +183,22 @@ function isLoginValid() {
   return false;
 }
 
-// 메인 함수 - 로그인 가능 여부에 따라 모달 띄우기
+// 로그인 버튼 -> 모달 띄우기, 링크 이동
 const loginModal = {
   modal: document.querySelector(".modal"),
   modalCloseBtn: document.querySelector(".modal-close-btn")
 }
 
-function showLoginErrorModal(e) {
-  const isValid = isLoginValid();
-  if (!isValid) {
-    e.preventDefault();
-    loginModal.modal.classList.remove("hidden");
+function clickLoginBtn(e) {
+  if (loginBtn.status === "valid") {
+    const loginValid = isLoginValid();
+    if (!loginValid) { // valid -> 이메일, 비번 틀림 -> 링크 이동 x & 모달 띄우기
+      loginModal.modal.classList.remove("hidden");
+    } else if (loginValid) { // 링크 이동
+      window.location.href = "../items.html"
+    }
   }
+  // invalid -> 링크 이동 x
 }
 
 function closeModal(e) {
@@ -206,7 +207,7 @@ function closeModal(e) {
   modalElement.classList.add("hidden");
 }
 
-loginBtn.element.addEventListener("click", showLoginErrorModal);
+loginBtn.element.addEventListener("click", clickLoginBtn);
 loginModal.modalCloseBtn.addEventListener("click", closeModal);
 
 // 비밀번호 표시/숨기기 토글

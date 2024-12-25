@@ -195,8 +195,6 @@ const signupBtn = {
   status: "invalid",
 }
 
-signupBtn.element.disabled = true;
-
 function setSignupBtnStatus() {
   const emailValid = signupInputFields.email.status === "valid";
   const nicknameValid = signupInputFields.nickname.status === "valid";
@@ -223,7 +221,6 @@ const signupBtnStatusConfig = {
 function applySignupBtnStatus(config) {
   if (config.class) signupBtn.element.classList.add(config.class);
   if (config.removeClass) signupBtn.element.classList.remove(config.removeClass);
-  if (!config.disabled) signupBtn.element.disabled = false;
 }
 
 function changeSignupBtnStatus() {
@@ -258,18 +255,22 @@ function isSignupValid() {
   return true;
 }
 
-// 메인 함수 - 회원가입 가능 여부에 따라 모달 띄우기
+// 회원가입 버튼 -> 모달 띄우기, 링크 이동
 const signupModal = {
   modal: document.querySelector(".modal"),
   modalCloseBtn: document.querySelector(".modal-close-btn")
 }
 
-function showSignupErrorModal(e) {
-  const isValid = isSignupValid();
-  if (!isValid) {
-    e.preventDefault();
-    signupModal.modal.classList.remove("hidden");
+function clickSignupBtn(e) {
+  if (signupBtn.status === "valid") {
+    const signupValid = isSignupValid();
+    if (!signupValid) { // valid -> 이미 있는 아이디인지 확인 -> 링크 이동 x & 모달 띄우기
+      signupModal.modal.classList.remove("hidden");
+    } else if (signupValid) { // 링크 이동
+      window.location.href = "../index.html"
+    }
   }
+  // invalid -> 링크 이동 x
 }
 
 function closeModal(e) {
@@ -278,7 +279,7 @@ function closeModal(e) {
   modalElement.classList.add("hidden");
 }
 
-signupBtn.element.addEventListener("click", showSignupErrorModal);
+signupBtn.element.addEventListener("click", clickSignupBtn);
 signupModal.modalCloseBtn.addEventListener("click", closeModal);
 
 // 비밀번호 표시/숨기기 토글
