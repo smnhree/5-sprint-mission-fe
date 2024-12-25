@@ -108,7 +108,6 @@ header {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  height: 54rem;
 }
 
 .main-welcome-wrap,.main-bottom-wrap {
@@ -116,7 +115,7 @@ header {
   justify-content: center;
   align-items: flex-end;
   max-width: 111rem;
-  width: 90%;
+  padding-top: 20rem;
 }
 
 /* main-welcome */
@@ -125,21 +124,16 @@ header {
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  padding-bottom: 7%;
-  gap: 2rem;
+  padding-bottom: 10rem;
+  gap: 3rem;
 }
 
-.main-welcome-conts p {
-  width: 80%;
-}
-
-.main-welcome-wrap > img {
-  width: 60%;  /* todo: 이미지 크기 다른 방식으로 */
+.main-welcome-wrap > img, .main-bottom-wrap > img {
+  width: 74.6rem;
 }
 
 #main-visit-btn {
-  max-width: 35.7rem;
-  width: 90%;
+  width: 35.7rem;
   height: 5.6rem;
   border-radius: 40rem;
   background-color: var(--primary-color-100);
@@ -152,21 +146,17 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 40%;
   padding-bottom: 15%;
   gap: 2rem;
 }
 
-.main-bottom-wrap > img {
-  width: 60%;
-}
-
 /*main-feature 공통*/
+
 .main-feature {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 72rem;
+  margin: 13.8rem auto;
 }
 
 .main-feature-wrap {
@@ -174,13 +164,12 @@ header {
   justify-content: center;
   align-items: center;
   background-color: #FCFCFC;
-  max-width: 98.8rem;
-  width: 90%;
-  gap: 5%;
+  width: 98.8rem;
+  gap: 5rem;
 }
 
 .main-feature-wrap img {
-  width: 60%;
+  width: 58.8rem
 }
 
 .main-feature-conts {
@@ -197,7 +186,6 @@ header {
 }
 
 .main-feature-text {
-  height: 20rem;
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
@@ -218,7 +206,6 @@ header {
 footer {
   display: flex;
   justify-content: center;
-  align-items: center;
   height: 16rem;
   background-color: var(--secondary-color-900);
   font-size: 1.6rem;
@@ -234,7 +221,7 @@ footer {
   margin: 3.2rem 20rem 10.8rem;
 }
 
-footer span {
+#copyright {
   color: var(--secondary-color-400);
 }
 
@@ -468,29 +455,142 @@ footer a {
   #header-wrap {
     margin: 0 2.4rem;
   }
+
   .main-welcome-wrap,.main-bottom-wrap {
     flex-direction: column;
+    justify-content: flex-end;
     align-items: center;
+    padding-top: 10rem;
   }
+
   .main-welcome-conts {
-    width: 100%;
     align-items: center;
   }
   
-  .main-welcome-conts p {
-    height: 100%;
+  .main-welcome-conts p, .main-bottom-conts p {
     text-align: center;
   }
-  
+
   .main-welcome-wrap > img {
-    height: 100%;
+    width: 69.6rem;
   }
+
+  .main-features {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2.4rem;
+    gap: 5.2rem;
+  }
+
+  .main-feature {
+    margin: 0;
+  }
+
+  .main-feature-wrap {
+    flex-direction: column;
+    background-color: #ffffff;
+    width: 69.6rem;
+    gap: 2.4rem;
+  }
+
+  .main-feature-wrap img {
+    order: 0;
+    width: 69.6rem;
+  }
+
+  .main-feature-conts {
+    order: 1;
+    width: 100%;
+  }
+
+  .main-feature-text {
+    gap: 0;
+  }
+  
+  .main-feature-text > .main-large-txt {
+    font-size: 3.2rem;
+  }
+
+  #footer-wrap {
+    margin: 3.2rem 2.4rem 10.8rem;
+  }
+
 }
 
 @media (max-width: 743px) {
+  .main-large-txt {
+    font-size: 3.2rem;
+    line-height: 4.48rem;
+  }
+
+  .main-small-txt {
+    font-size:1.6rem;
+    line-height: 1.92rem;
+  }
+
   #header-wrap {
     margin: 0 1.6rem;
   }
+
+  .main-welcome-wrap,.main-bottom-wrap {
+    padding-top: 5rem;
+  }
+  
+  .main-welcome-conts {
+    align-items: center;
+    width: 24rem;
+    gap: 3rem;
+  }
+
+  #main-visit-btn {
+    height: 4.8rem;
+    font-size: 1.8rem;
+    width: 100%;
+  }
+
+  .main-feature {
+    margin: 0;
+  }
+
+  .main-feature-wrap {
+    margin: auto 32px;
+  }
+
+  .main-welcome-wrap > img, .main-bottom-wrap > img {
+    width: 100%;
+  }
+
+  .main-feature {
+    width: 100%;
+  }
+
+  .main-feature-wrap img {
+    width: 100%;
+  }
+
+  #footer-wrap {
+    margin: 3.2rem 1.6rem auto;
+    flex-wrap: wrap;
+  }
+
+  #footer-wrap > div {
+    margin: 1rem 0;
+  }
+
+  #copyright {
+    order: 2;
+  }
+
+  #footer-conts {
+    order: 0;
+  }
+
+  #footer-sns-icons {
+    order: 1;
+  }
+
 }
 
 /* login.js, signup.js 미디어쿼리 */
