@@ -1,14 +1,5 @@
 import USER_DATA from "../data/userData.js";
 
-// const USER_DATA = [
-//   {email: 'codeit1@codeit.com', password: "codeit101!"},
-//   {email: 'codeit2@codeit.com', password: "codeit202!"},
-//   {email: 'codeit3@codeit.com', password: "codeit303!"},
-//   {email: 'codeit4@codeit.com', password: "codeit404!"},
-//   {email: 'codeit5@codeit.com', password: "codeit505!"},
-//   {email: 'codeit6@codeit.com', password: "codeit606!"}
-// ];
-
 const loginInputFields = {
   email: {
     input: document.querySelector("#input-email"),
@@ -173,7 +164,7 @@ loginInputFields.password.input.addEventListener("input", changeloginBtnStatus);
 function isLoginValid() {
   const emailValue = loginInputFields.email.input.value;
   const passwordValue = loginInputFields.password.input.value;
-  for (data of USER_DATA) {
+  for (let data of USER_DATA) {
     if((data["email"] === emailValue) && (data["password"] === passwordValue)) {
       return true;
     }

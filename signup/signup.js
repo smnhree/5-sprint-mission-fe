@@ -222,7 +222,7 @@ signupInputFields.passwordCheck.input.addEventListener("input", changeSignupBtnS
 // 회원가입 가능 여부 판단
 function isSignupValid() {
   const emailValue = signupInputFields.email.input.value;
-  for (data of USER_DATA) {
+  for (let data of USER_DATA) {
     if(data["email"] === emailValue) {
       return false;
     }
