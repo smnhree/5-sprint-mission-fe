@@ -1,5 +1,13 @@
-// todo: CORS 오류 해결
-// import { USER_DATA } from "../data/userData"; CORS 오류 뜸
+import USER_DATA from "../data/userData.js";
+
+// const USER_DATA = [
+//   {email: 'codeit1@codeit.com', password: "codeit101!"},
+//   {email: 'codeit2@codeit.com', password: "codeit202!"},
+//   {email: 'codeit3@codeit.com', password: "codeit303!"},
+//   {email: 'codeit4@codeit.com', password: "codeit404!"},
+//   {email: 'codeit5@codeit.com', password: "codeit505!"},
+//   {email: 'codeit6@codeit.com', password: "codeit606!"}
+// ];
 
 const loginInputFields = {
   email: {
@@ -161,16 +169,6 @@ loginInputFields.email.input.addEventListener("input", changeloginBtnStatus);
 loginInputFields.password.input.addEventListener("input", changeloginBtnStatus);
 
 // 모달
-// todo: CORS 해결 후 USER_DATA array 삭제
-const USER_DATA = [
-  {email: 'codeit1@codeit.com', password: "codeit101!"},
-  {email: 'codeit2@codeit.com', password: "codeit202!"},
-  {email: 'codeit3@codeit.com', password: "codeit303!"},
-  {email: 'codeit4@codeit.com', password: "codeit404!"},
-  {email: 'codeit5@codeit.com', password: "codeit505!"},
-  {email: 'codeit6@codeit.com', password: "codeit606!"}
-]
-
 // 로그인 가능 여부 판단
 function isLoginValid() {
   const emailValue = loginInputFields.email.input.value;
@@ -212,8 +210,8 @@ loginModal.modalCloseBtn.addEventListener("click", closeModal);
 
 // 비밀번호 표시/숨기기 토글
 const passwordVisibilityIcon = {
-  element: document.querySelector("#visibility-icon"),
-  img: document.querySelector("#visibility-icon > img")
+  element: document.querySelector(".visibility-icon"),
+  img: document.querySelector(".visibility-icon > img")
 }
 
 function passwordVisivilityToggle() {

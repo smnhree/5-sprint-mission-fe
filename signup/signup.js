@@ -1,19 +1,4 @@
-/*
-- getEmaiilStatus, getNicknameStatus, ... -> get만 할 것, set 따로 만들 것
-  - (Optional) getFieldStatus(fieldName)로 단일 함수 만들 것
-  - setFieldStatus(fieldName, inputContent)
-
-- updateEmailInputStatus, updateNicknameInputStatus, ... 
-  -> 위에서 만든 setFieldStatus사용하는 하나의 함수로 작성할 것, ex) updateFieldByEvent(fieldName, e)
-
-- emailInputErrors(e), nicknameInputErrors(e), ...
-  -> updateFieldStyleByEvent(fieldName, e)
-
-- getSignupBtnStatus -> set으로 변경
-*/
-
-// todo: CORS 오류 해결
-// import { USER_DATA } from "../data/userData"; CORS 오류 뜸
+import USER_DATA from "../data/userData.js";
 
 const signupInputFields = {
   email: {
@@ -234,16 +219,6 @@ signupInputFields.password.input.addEventListener("input", changeSignupBtnStatus
 signupInputFields.passwordCheck.input.addEventListener("input", changeSignupBtnStatus);
 
 // 모달
-// todo: CORS 해결 후 USER_DATA array 삭제
-const USER_DATA = [
-  {email: 'codeit1@codeit.com', password: "codeit101!"},
-  {email: 'codeit2@codeit.com', password: "codeit202!"},
-  {email: 'codeit3@codeit.com', password: "codeit303!"},
-  {email: 'codeit4@codeit.com', password: "codeit404!"},
-  {email: 'codeit5@codeit.com', password: "codeit505!"},
-  {email: 'codeit6@codeit.com', password: "codeit606!"}
-]
-
 // 회원가입 가능 여부 판단
 function isSignupValid() {
   const emailValue = signupInputFields.email.input.value;
@@ -285,11 +260,11 @@ signupModal.modalCloseBtn.addEventListener("click", closeModal);
 // 비밀번호 표시/숨기기 토글
 const passwordVisibilityIcon = {
   password: {
-    element: document.querySelector(".password-field #visibility-icon"),
+    element: document.querySelector(".password-field .visibility-icon"),
     img: document.querySelector(".password-field #visibility-icon > img")
   },
   passwordCheck: {
-    element: document.querySelector(".passwordCheck-field #visibility-icon"),
+    element: document.querySelector(".passwordCheck-field .visibility-icon"),
     img: document.querySelector(".passwordCheck-field #visibility-icon > img")
   }
 }

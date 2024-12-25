@@ -332,7 +332,7 @@ footer a {
   padding: 0.8rem 1.6rem;
 }
 
-#visibility-icon {
+.visibility-icon {
   width: 2.4rem;
   height: 2.4rem;
   position: absolute;
@@ -340,7 +340,7 @@ footer a {
   right: 2rem;
 }
 
-#visibility-icon img {
+.visibility-icon img {
   width: 100%;
 }
 
