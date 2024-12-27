@@ -261,11 +261,11 @@ signupModal.modalCloseBtn.addEventListener("click", closeModal);
 const passwordVisibilityIcon = {
   password: {
     element: document.querySelector(".password-field .visibility-icon"),
-    img: document.querySelector(".password-field #visibility-icon > img")
+    img: document.querySelector(".password-field .visibility-icon > img")
   },
   passwordCheck: {
     element: document.querySelector(".passwordCheck-field .visibility-icon"),
-    img: document.querySelector(".passwordCheck-field #visibility-icon > img")
+    img: document.querySelector(".passwordCheck-field .visibility-icon > img")
   }
 }
 
