@@ -12,39 +12,54 @@ const instance = axios.create({
   baseURL: "https://sprint-mission-api.vercel.app/"
 })
 
+const endpoint = "products/"
 
-const url = {
-  origin: "https://sprint-mission-api.vercel.app/",
-  pathName: "products/",
+const messages = {
+  error: {
+    getProductList: "물품 목록을 불러오는데 실패했습니다.",
+    getProduct: "물품 정보를 불러오는데 실패했습니다.",
+    createProduct: "새로운 물품을 생성하는데 실패했습니다.",
+    patchProduct: "물품 정보를 수정하는데 실패했습니다.",
+    deleteProduct: "물품을 삭제하는데 실패했습니다."
+  },
+  success: {
+    deleteProduct: "게시글을 삭제하였습니다."
+  }
+}
+
+function getErrorMessage(e, message) {
+  const errorMessage = {
+    message,
+    "상태 코드": e.response.status,
+  }
+  if (e.response.data.message) {
+    errorMessage["오류 내용"] = e.response.data.message;
+  }
+  return errorMessage;
 }
 
 async function getProductList({ page = 1, pageSize = 100, keyword = "" } = {}) {
   const searchParams = { page, pageSize, keyword };
   try {
-    const res = await instance.get("productsssss/", { params: searchParams });
+    const res = await instance.get(endpoint, { params: searchParams });
     return res.data;
   } catch(e) {
-    console.log("물품 목록을 불러오는데 실패했습니다.");
-    console.log("상태 코드: ", e.response.status);
-    console.log("오류 내용: ", e.response.data.message);
+    return getErrorMessage(e, messages.error.getProductList);
   }
-
 }
 
 async function getProduct(id) {
   try {
-    const res = await instance.get(`products/${id}`);
+    const res = await instance.get(`${endpoint}${id}`);
     return res.data;
   } catch(e) {
-    console.log("물품 정보를 불러오는데 실패했습니다.");
-    console.log("상태 코드: ", e.response.status);
-    console.log("오류 내용: ", e.response.data.message);
+    return getErrorMessage(e, messages.error.getProduct);
   }
 }
 
 async function createProduct(newData) {
   try {
-    const res = await instance.post("products/", {
+    const res = await instance.post(endpoint, {
       name: newData.name,
       description: newData.description,
       price: newData.price,
@@ -53,15 +68,13 @@ async function createProduct(newData) {
     });
     return res.data;
   } catch(e) {
-    console.log("새로운 물품을 생성하는데 실패했습니다.");
-    console.log("상태 코드: ", e.response.status);
-    console.log("오류 내용: ", e.response.data.message);
+    return getErrorMessage(e, messages.error.createProduct);
   }
 }
 
 async function patchProduct(id, updatedData) {
   try {
-    const res = await instance.patch(`products/${id}`, {
+    const res = await instance.patch(`${endpoint}${id}`, {
       name: updatedData.name,
       description: updatedData.description,
       price: updatedData.price,
@@ -70,20 +83,15 @@ async function patchProduct(id, updatedData) {
     });
     return res.data;
   } catch(e) {
-    console.log("물품 정보를 수정하는데 실패했습니다.");
-    console.log("상태 코드: ", e.response.status);
-    console.log("오류 내용: ", e.response.data.message);
+    return getErrorMessage(e, messages.error.patchProduct);
   }
 }
 
 async function deleteProduct(id) {
   try {
-    const res = await instance.delete(`products/${id}`);
-    console.log("게시글을 삭제하였습니다.")
-    // todo: 무엇을 return 해야 할까..
+    const res = await instance.delete(`${endpoint}${id}`);
+    return messages.success.deleteProduct;
   } catch(e) {
-    console.log("물품을 삭제하는데 실패했습니다.");
-    console.log("상태 코드: ", e.response.status);
-    console.log("오류 내용: ", e.response.data.message);
+    return getErrorMessage(e, messages.error.deleteProduct);
   }
 }

@@ -15,16 +15,16 @@ const updatedArticleData = {
 // const data1 = await articleService.getArticleList({ page: 1, pageSize: 1, });
 // console.log(data1);
 
-// console.log("===getArrticle 실행 결과입니다.===")
-// const data2 = await articleService.getArticle(1479);
-// console.log(data2);
+console.log("===getArticle 실행 결과입니다.===")
+const data2 = await articleService.getArticle(9999);
+console.log(data2);
 
 // console.log("===createArticle 실행 결과입니다.===")
 // const data3 = await articleService.createArticle(newArticleData);
 // console.log(data3);
 
 // console.log("===patchArticle 실행 결과입니다.===")
-// const data4 = await articleService.patchArticle(1547, updatedArticleData);
+// const data4 = await articleService.patchArticle(1589, updatedArticleData);
 // console.log(data4);
 
 // console.log("===deleteArticle 실행 결과입니다.===")
@@ -55,9 +55,9 @@ const updatedProductData = {
 // const data6 = await productService.getProductList({ page: 1, pageSize: 1 });
 // console.log(data6);
 
-console.log("===getProduct 실행 결과입니다.===")
-const data7 = await productService.getProduct(99999);
-console.log(data7);
+// console.log("===getProduct 실행 결과입니다.===")
+// const data7 = await productService.getProduct(99999);
+// console.log(data7);
 
 // console.log("===createProductle 실행 결과입니다.===")
 // const data8 = await productService.createProduct(newProductData);
@@ -68,5 +68,5 @@ console.log(data7);
 // console.log(data9);
 
 // console.log("===deleteProductle 실행 결과입니다.===")
-// const data10 = await productService.deleteProduct(99999);
+// const data10 = await productService.deleteProduct(766);
 // console.log(data10);
