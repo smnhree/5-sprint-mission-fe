@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>판다마켓 - 회원가입</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="../reset.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <body>
+    <div id="signup-wrap">
+      <div>
+        <a id="signup-logo" href="../index.html"><img src="../img/logo.png" art="판다마켓 로고" /></a>
+      </div>
+      <div id="signup-conts">
+        <form class="signup-form">
+          <label for="input-email">이메일</label>
+          <div class="input-box">
+            <input id="input-email" placeholder="이메일을 입력해주세요." />
+          </div>
+          <span class="blank-email-msg hidden">이메일을 입력해주세요.</span>
+          <span class="invalid-email-msg hidden">잘못된 이메일 형식입니다.</span>
+        </form>
+        <form class="signup-form">
+          <label for="input-nickname">닉네임</label>
+          <div class="input-box">
+            <input id="input-nickname" placeholder="닉네임을 입력해주세요." />
+          </div>
+          <span class="blank-nickname-msg hidden">닉네임을 입력해주세요.</span>
+        </form>
+        <form class="signup-form password-field">
+          <label for="input-password">비밀번호</label>
+          <div class="input-box">
+            <input id="input-password" type="password" placeholder="비밀번호를 입력해주세요." />
+            <button class="visibility-icon" type="button"><img src="../img/btn_visibility_off.png" alt="visibility" /></button>  
+          </div>
+          <span class="blank-psw-msg hidden">비밀번호를 입력해주세요.</span>
+          <span class="invalid-psw-msg hidden">비밀번호를 8자 이상 입력해주세요.</span>
+        </form>
+        <form class="signup-form passwordCheck-field">
+          <label for="input-password-check">비밀번호 확인</label>
+          <div class="input-box">
+            <input id="input-password-check" type="password" placeholder="비밀번호를 다시 한 번 입력해주세요." />
+            <button class="visibility-icon" type="button"><img src="../img/btn_visibility_off.png" alt="visibility" /></button>  
+          </div>
+          <span class="not-match-psw-msg hidden">비밀번호가 일치하지 않습니다.</span>
+        </form>
+        <button id="signup-btn">
+          회원가입
+        </button>
+        <div id="social-login">
+          <span>간편 로그인하기</span>
+          <div id="social-logo-wrap">
+            <a href="https://www.google.com/"><img class="social-logo" src="../img/ic_google_login.png" art="google" /></a>
+            <a href="https://www.kakaocorp.com/page/"><img class="social-logo" src="../img/ic_kakao_login.png" art="kakao" /></a>
+          </div>
+        </div>
+        <div id="login-text">
+          <p>
+            회원이신가요? <a href="../login/login.html">로그인</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal hidden">
+      <div class="modal-popup">
+        <p>사용 중인 이메일입니다.</p>
+        <button class="modal-close-btn">확인</button>
+      </div>
+    </div>
+    <script  type="module" src="signup.js"></script>
+</body>
+</html>

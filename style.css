@@ -23,7 +23,6 @@
 
 * {
   font-family: Pretendard;
-  /* outline: 1px solid red; */
 }
 
 html {
@@ -35,6 +34,7 @@ button {
   border: 0;
   background-color: transparent;
   cursor: pointer;
+  padding: 0;
 }
 
 button, a {
@@ -82,6 +82,7 @@ header {
   justify-content: space-between;
   align-items: center;
   max-width: 112rem;
+  width: 100%;
   min-width: 30rem;
   flex-grow: 1;
   margin: 0 20rem;
@@ -95,6 +96,10 @@ header {
 #main-login-btn {
   width: 12.8rem;
   height: 4.8rem;
+  border-radius: 0.8rem;
+  background-color: var(--primary-color-100);
+  font-size: 1.6rem;
+  color: var(--secondary-color-100);
 }
 
 /*main-welcome, main-bottom*/
@@ -103,15 +108,14 @@ header {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  height: 54rem;
 }
 
 .main-welcome-wrap,.main-bottom-wrap {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-end;
   max-width: 111rem;
-  width: 90%;
+  padding-top: 20rem;
 }
 
 /* main-welcome */
@@ -119,13 +123,22 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 40%;
-  padding-bottom: 7%;
-  gap: 2rem;
+  align-items: center;
+  padding-bottom: 10rem;
+  gap: 3rem;
 }
 
-.main-welcome-wrap > img {
-  width: 60%;
+.main-welcome-wrap > img, .main-bottom-wrap > img {
+  width: 74.6rem;
+}
+
+#main-visit-btn {
+  width: 35.7rem;
+  height: 5.6rem;
+  border-radius: 40rem;
+  background-color: var(--primary-color-100);
+  font-size: 2rem;
+  color: var(--secondary-color-50);
 }
 
 /* main-bottom */
@@ -133,21 +146,17 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 40%;
   padding-bottom: 15%;
   gap: 2rem;
 }
 
-.main-bottom-wrap > img {
-  width: 60%;
-}
-
 /*main-feature 공통*/
+
 .main-feature {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 72rem;
+  margin: 13.8rem auto;
 }
 
 .main-feature-wrap {
@@ -155,13 +164,12 @@ header {
   justify-content: center;
   align-items: center;
   background-color: #FCFCFC;
-  max-width: 98.8rem;
-  width: 90%;
-  gap: 5%;
+  width: 98.8rem;
+  gap: 5rem;
 }
 
 .main-feature-wrap img {
-  width: 60%;
+  width: 58.8rem
 }
 
 .main-feature-conts {
@@ -178,7 +186,6 @@ header {
 }
 
 .main-feature-text {
-  height: 20rem;
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
@@ -199,7 +206,6 @@ header {
 footer {
   display: flex;
   justify-content: center;
-  align-items: center;
   height: 16rem;
   background-color: var(--secondary-color-900);
   font-size: 1.6rem;
@@ -215,7 +221,7 @@ footer {
   margin: 3.2rem 20rem 10.8rem;
 }
 
-footer span {
+#copyright {
   color: var(--secondary-color-400);
 }
 
@@ -251,7 +257,7 @@ footer a {
 
 #login-wrap, #signup-wrap {
   box-sizing: border-box;
-  padding: 23.1rem 2rem;
+  padding: 5% 1.6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -271,6 +277,7 @@ footer a {
 }
 
 #login-conts, #signup-conts {
+  width: 100%;
   max-width: 64rem;
   display: flex;
   flex-direction: column;
@@ -280,6 +287,7 @@ footer a {
 .login-form, .signup-form {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .login-form label, .signup-form label {
@@ -292,6 +300,7 @@ footer a {
 
 .input-box {
   position: relative;
+  width: 100%;
 }
 
 .input-box input {
@@ -305,11 +314,25 @@ footer a {
   padding: 1.5rem 2.4rem;
 }
 
-.inputbox input:focus {
+.input-box input:focus {
   outline: 0.1rem solid var(--primary-color-100);
 }
 
-#visibility-icon {
+.input-box input.error {
+  outline: 0.1rem solid var(--error-color);
+}
+
+.blank-email-msg, .blank-psw-msg, .blank-nickname-msg,
+.invalid-email-msg, .invalid-psw-msg,
+.not-match-psw-msg {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--error-color);
+  padding: 0.8rem 1.6rem;
+}
+
+.visibility-icon {
   width: 2.4rem;
   height: 2.4rem;
   position: absolute;
@@ -317,9 +340,23 @@ footer a {
   right: 2rem;
 }
 
-/* #login-btn:hover img {
-  content: url('img/btn_login_large_active.png')
-} */
+.visibility-icon img {
+  width: 100%;
+}
+
+#login-btn, #signup-btn {
+  width: 100%;
+  height: 5.6rem;
+  border-radius: 4rem;
+  background-color: var(--secondary-color-400);
+  font-size: 2rem;
+  color: var(--secondary-color-100);
+  text-decoration-line: none;
+}
+
+#login-btn.valid, #signup-btn.valid {
+  background-color: var(--primary-color-100);
+}
 
 #social-login {
   box-sizing: border-box;
@@ -330,7 +367,6 @@ footer a {
   justify-content: space-between;
   align-items: center;
   padding: 1.6rem 2.3rem;
-
 }
 
 #social-login span {
@@ -361,4 +397,210 @@ footer a {
 #signup-text a, #login-text a {
   display: inline;
   color: var(--primary-color-100);
+}
+
+/*모달*/
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal .modal-popup {
+  background-color: #ffffff;
+  font-size: 1.6rem;
+  max-width: 54rem;
+  height: 25rem;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 0.8rem;
+}
+
+.modal-popup p {
+  position: absolute;
+  text-align: center;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--secondary-color-800);
+  font-weight: 500;
+}
+
+.modal-popup button {
+  background-color: var(--primary-color-100);
+  width: 12rem;
+  height: 4.8rem;
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
+  border-radius: 0.8rem;
+  font-size: 1.6rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+
+.hidden {
+  display: none;
+}
+
+/* index.js 미디어쿼리 */
+@media (max-width: 1199px) {
+  #header-wrap {
+    margin: 0 2.4rem;
+  }
+
+  .main-welcome-wrap,.main-bottom-wrap {
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 10rem;
+  }
+
+  .main-welcome-conts {
+    align-items: center;
+  }
+  
+  .main-welcome-conts p, .main-bottom-conts p {
+    text-align: center;
+  }
+
+  .main-welcome-wrap > img {
+    width: 69.6rem;
+  }
+
+  .main-features {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2.4rem;
+    gap: 5.2rem;
+  }
+
+  .main-feature {
+    margin: 0;
+  }
+
+  .main-feature-wrap {
+    flex-direction: column;
+    background-color: #ffffff;
+    width: 69.6rem;
+    gap: 2.4rem;
+  }
+
+  .main-feature-wrap img {
+    order: 0;
+    width: 69.6rem;
+  }
+
+  .main-feature-conts {
+    order: 1;
+    width: 100%;
+  }
+
+  .main-feature-text {
+    gap: 0;
+  }
+  
+  .main-feature-text > .main-large-txt {
+    font-size: 3.2rem;
+  }
+
+  #footer-wrap {
+    margin: 3.2rem 2.4rem 10.8rem;
+  }
+
+}
+
+@media (max-width: 743px) {
+  .main-large-txt {
+    font-size: 3.2rem;
+    line-height: 4.48rem;
+  }
+
+  .main-small-txt {
+    font-size:1.6rem;
+    line-height: 1.92rem;
+  }
+
+  #header-wrap {
+    margin: 0 1.6rem;
+  }
+
+  .main-welcome-wrap,.main-bottom-wrap {
+    padding-top: 5rem;
+  }
+  
+  .main-welcome-conts {
+    align-items: center;
+    width: 24rem;
+    gap: 3rem;
+  }
+
+  #main-visit-btn {
+    height: 4.8rem;
+    font-size: 1.8rem;
+    width: 100%;
+  }
+
+  .main-feature {
+    margin: 0;
+  }
+
+  .main-feature-wrap {
+    margin: auto 32px;
+  }
+
+  .main-welcome-wrap > img, .main-bottom-wrap > img {
+    width: 100%;
+  }
+
+  .main-feature {
+    width: 100%;
+  }
+
+  .main-feature-wrap img {
+    width: 100%;
+  }
+
+  #footer-wrap {
+    margin: 3.2rem 1.6rem auto;
+    flex-wrap: wrap;
+  }
+
+  #footer-wrap > div {
+    margin: 1rem 0;
+  }
+
+  #copyright {
+    order: 2;
+  }
+
+  #footer-conts {
+    order: 0;
+  }
+
+  #footer-sns-icons {
+    order: 1;
+  }
+
+}
+
+/* login.js, signup.js 미디어쿼리 */
+@media (max-width: 743px) {
+  #login-logo, #signup-logo {
+    width: 19.8rem;
+    height: 6.6rem;
+  }
+  #login-conts, #signup-conts {
+    width: 100%;
+    max-width: 40rem;
+  }
 }
