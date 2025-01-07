@@ -10,7 +10,7 @@ import "./ProductsSection.css";
 const REQUEST_PAGE_SIZE = 10;
 
 export function ProductsSection() {
-  // todo: state 깔끔하게 정리
+  // todo: state 깔끔하게 정리, isLoading 구현
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState("recent");
