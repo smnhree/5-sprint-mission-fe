@@ -1,0 +1,24 @@
+.nav,
+.nav-logo-menus-wrap,
+.nav-menus {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 30rem;
+  padding: 0 20rem;
+  height: 7rem;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  border-bottom: 0.1rem solid #dfdfdf;
+}
+
+.nav-logo-menus-wrap {
+  gap: 2.4rem;
+}

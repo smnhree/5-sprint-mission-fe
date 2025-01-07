@@ -1,0 +1,15 @@
+.best-products-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.best-products-section .section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 3.2rem;
+}
+.best-products-section .products {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 24px;
+}

@@ -1,0 +1,47 @@
+.products-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.products-section .section-top-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.products-section .section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 3.2rem;
+}
+
+.products-section .몰라 {
+  display: flex;
+}
+
+.products-section .sort-btn {
+  width: 13rem;
+  height: 4.2rem;
+  border: 0.1rem solid var(--secondary-color-200);
+  border-radius: 1.2rem;
+  padding: 1.2rem 2rem;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 2.6rem;
+}
+
+.products-section .products {
+  display: grid;
+  grid-template: 1fr 1fr / 1fr 1fr 1fr 1fr 1fr;
+  gap: 2.4rem;
+}
+
+.products-section .page-btns {
+  display: flex;
+}
+
+.products-section .page-btns {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
