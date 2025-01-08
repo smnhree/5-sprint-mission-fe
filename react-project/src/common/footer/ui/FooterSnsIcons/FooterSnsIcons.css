@@ -1,0 +1,14 @@
+.footer-sns-icons {
+  display: flex;
+  flex-direction: row;
+  gap: 1.2rem;
+}
+
+.footer-sns-icons a {
+  width: 2rem;
+  height: 2rem;
+}
+
+.footer-sns-icons a img {
+  width: 100%;
+}

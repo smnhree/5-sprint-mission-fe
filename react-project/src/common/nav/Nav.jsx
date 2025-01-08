@@ -1,11 +1,11 @@
 import { NavLogo } from "./ui/NavLogo/NavLogo";
 import { NavMenu } from "./ui/NavMenu/NavMenu";
-import "./Nav.css";
 import { Button } from "../Button/Button";
+import "./Nav.css";
 
 export function Nav() {
   return (
-    <div className="nav">
+    <div className={"nav"}>
       <div className="nav-logo-menus-wrap">
         <NavLogo />
         <div className="nav-menus">

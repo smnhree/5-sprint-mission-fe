@@ -2,17 +2,6 @@
   background-color: #fcfcfc;
 }
 
-.market-place-page .nav-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 7rem;
-  position: sticky;
-  top: 0;
-  background-color: white;
-  border-bottom: 0.1rem solid #dfdfdf;
-}
-
 .market-place-page .sections-wrap {
   display: flex;
   flex-direction: column;

@@ -15,8 +15,13 @@
   line-height: 3.2rem;
 }
 
-.products-section .몰라 {
+.products-section .section-controller {
   display: flex;
+  gap: 1.2rem;
+}
+
+.products-section .dropdown-wrap {
+  position: relative;
 }
 
 .products-section .sort-btn {
@@ -30,10 +35,16 @@
   line-height: 2.6rem;
 }
 
+/* .products-section .loadingMsg {
+  font-size: 20rem;
+} */
+
 .products-section .products {
   display: grid;
   grid-template: 1fr 1fr / 1fr 1fr 1fr 1fr 1fr;
   gap: 2.4rem;
+  margin-top: 2.4rem;
+  margin-bottom: 4.3rem;
 }
 
 .products-section .page-btns {

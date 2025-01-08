@@ -5,6 +5,7 @@ import { PaginationBtn } from "../ui/PaginationBtn/PaginationBtn";
 import { ProductSearchForm } from "../ui/ProductSearchForm/ProductSearchForm";
 import { ProductsSortDropdown } from "../ui/ProductsSortDropdown/ProductsSortDropdown";
 import { Button } from "../../../../common/Button/Button";
+import { PaginationGroupChangeBtn } from "../ui/PaginationGroupChangeBtn/PaginationGroupChangeBtn";
 import "./ProductsSection.css";
 
 const REQUEST_PAGE_SIZE = 10;
@@ -12,9 +13,10 @@ const REQUEST_PAGE_SIZE = 10;
 export function ProductsSection() {
   // todo: state 깔끔하게 정리, isLoading 구현
   const [products, setProducts] = useState([]);
-  const [page, setPage] = useState(1);
+  const [activePage, setActivePage] = useState(1);
   const [order, setOrder] = useState("recent");
   const [keyword, setKeyword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // pagination 관련
   const [productsTotalCount, setProductsTotalCount] = useState(0);
@@ -25,7 +27,17 @@ export function ProductsSection() {
 
   // 데이터 불러오는 함수
   const handleLoadProducts = async (options) => {
-    const { list, totalCount } = await productService.getProductList(options);
+    let result;
+    try {
+      setIsLoading(true);
+      result = await productService.getProductList(options);
+    } catch (error) {
+      console.error(error);
+      return;
+    } finally {
+      setIsLoading(false);
+    }
+    const { list, totalCount } = result;
     setProducts(() => list);
     setProductsTotalCount(() => totalCount);
   };
@@ -39,7 +51,7 @@ export function ProductsSection() {
     };
   };
 
-  const debouncedLoadProduct = debounce(handleLoadProducts, 500);
+  const debouncedLoadProduct = debounce(handleLoadProducts, 1000);
 
   // useEffect
   useEffect(() => {
@@ -48,12 +60,12 @@ export function ProductsSection() {
 
   useEffect(() => {
     handleLoadProducts({
-      page: page,
+      page: activePage,
       pageSize: REQUEST_PAGE_SIZE,
       orderBy: order,
       keyword: keyword,
     });
-  }, [page, order]);
+  }, [activePage, order]);
 
   useEffect(() => {
     debouncedLoadProduct({ keyword: keyword.trim() });
@@ -61,7 +73,7 @@ export function ProductsSection() {
 
   // handle state(page, order, keyword) 함수
   const handlePage = (value) => {
-    setPage(() => value);
+    setActivePage(() => value);
   };
 
   const handleOrder = (value) => {
@@ -86,6 +98,7 @@ export function ProductsSection() {
   const pageGroupSize = 5;
   const nextStartPage = startPage + pageGroupSize;
   const prevStartPage = startPage - pageGroupSize;
+
   const handleNextPageGroup = () => {
     if (nextStartPage <= pageCount) {
       setStartPage(() => nextStartPage);
@@ -97,21 +110,28 @@ export function ProductsSection() {
     }
   };
 
+  const getPaginationBtnClassName = (page) => {
+    return page === activePage ? "active" : "";
+  };
+
   return (
     <div className="products-section">
       <div className="section-top-wrap">
         <div className="section-title">판매 중인 상품</div>
-        <div className="몰라">
+        <div className="section-controller">
           <ProductSearchForm keyword={keyword} onChange={handleKeyword} />
-          <Button text="상품 등록하기" width="16rem" />
-          <button className="sort-btn" onClick={toggleDropdown}>
-            최신순
-          </button>
-          {isSortDropdownActive && (
-            <ProductsSortDropdown onClick={handleOrder} />
-          )}
+          <Button text="상품 등록하기" width="13.3rem" />
+          <div className="dropdown-wrap">
+            <button className="sort-btn" onClick={toggleDropdown}>
+              최신순
+            </button>
+            {isSortDropdownActive && (
+              <ProductsSortDropdown onClick={handleOrder} />
+            )}
+          </div>
         </div>
       </div>
+      {/* {isLoading && <div className="loadingMsg">로딩중</div>} */}
       <div className="products">
         {products.map((item) => {
           const { id, images, name, price, favoriteCount } = item;
@@ -128,20 +148,27 @@ export function ProductsSection() {
         })}
       </div>
       <div className="page-btns">
-        <button onClick={handlePrevPageGroup} disabled={prevStartPage < 0}>
-          이전
-        </button>
+        {/* // todo: PaginationGroupChangeBtn arrow img로 교체 */}
+        <PaginationGroupChangeBtn
+          onClick={handlePrevPageGroup}
+          disabled={prevStartPage < 0}
+          arrow="<"
+        />
         {pageArray
           .slice(startPage - 1, startPage - 1 + pageGroupSize)
           .map((item) => (
-            <PaginationBtn key={item} value={item} onClick={handlePage} />
+            <PaginationBtn
+              key={item}
+              value={item}
+              onClick={handlePage}
+              classNames={`pagination-btn ${getPaginationBtnClassName(item)}`}
+            />
           ))}
-        <button
+        <PaginationGroupChangeBtn
           onClick={handleNextPageGroup}
           disabled={nextStartPage > pageCount}
-        >
-          다음
-        </button>
+          arrow=">"
+        />
       </div>
     </div>
   );

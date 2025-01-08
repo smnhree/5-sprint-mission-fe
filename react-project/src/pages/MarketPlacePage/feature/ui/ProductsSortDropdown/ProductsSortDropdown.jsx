@@ -2,7 +2,7 @@ import "./ProductsSortDropdown.css";
 
 export function ProductsSortDropdown({ onClick }) {
   return (
-    <div className="최신순좋아요순">
+    <div className="sort-dropdown">
       <button className="최신순" onClick={() => onClick("recent")}>
         최신순
       </button>

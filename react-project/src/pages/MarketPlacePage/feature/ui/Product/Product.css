@@ -1,12 +1,19 @@
 .product {
   display: flex;
   flex-direction: column;
+  gap: 1.6rem;
 }
-/* .product .product-img {
-  width: 28.2rem;
-  height: 28.2rem;
-  border-radius: 1.6rem;
-} */
+
+.product .product-img:hover {
+  box-shadow: 0 0 0.4rem #000000;
+}
+
+.product .product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
 .product .product-name {
   font-size: 1.4rem;
   font-weight: 500;
@@ -28,7 +35,7 @@
   line-height: 1.8rem;
   color: #4b5563;
 }
-.product .heart-ic {
+.product .heart-btn {
   width: 1.34rem;
   height: 1.165rem;
 }

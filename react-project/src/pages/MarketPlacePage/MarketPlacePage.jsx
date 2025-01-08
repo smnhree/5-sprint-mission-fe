@@ -1,3 +1,4 @@
+import { Footer } from "../../common/footer/Footer";
 import { Nav } from "../../common/nav/Nav";
 import { BestProductsSection } from "./feature/BestProductsSection/BestProductsSection";
 import { ProductsSection } from "./feature/ProductSection/ProductsSection";
@@ -11,7 +12,7 @@ export function MarketPlacePage() {
         <BestProductsSection />
         <ProductsSection />
       </main>
-      <footer>푸터...구현 중...</footer>
+      <Footer />
     </div>
   );
 }

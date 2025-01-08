@@ -1,4 +1,4 @@
-.pagination-btn {
+.pagination-group-change-btn {
   width: 4rem;
   height: 4rem;
   border-radius: 4rem;
@@ -7,9 +7,4 @@
   font-weight: 600;
   line-height: 2.6rem;
   color: var(--secondary-color-500);
-}
-
-.pagination-btn.active {
-  background-color: #2f80ed;
-  color: #f9fafb;
 }

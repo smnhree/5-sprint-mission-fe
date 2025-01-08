@@ -1,8 +1,8 @@
 import "./PaginationBtn.css";
 
-export function PaginationBtn({ value, onClick }) {
+export function PaginationBtn({ value, onClick, classNames }) {
   return (
-    <button className="PaginationBtn" onClick={() => onClick(value)}>
+    <button className={classNames} onClick={() => onClick(value)}>
       {value}
     </button>
   );
