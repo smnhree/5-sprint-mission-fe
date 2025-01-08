@@ -6,17 +6,22 @@ import { ProductSearchForm } from "../ui/ProductSearchForm/ProductSearchForm";
 import { ProductsSortDropdown } from "../ui/ProductsSortDropdown/ProductsSortDropdown";
 import { Button } from "../../../../common/Button/Button";
 import { PaginationGroupChangeBtn } from "../ui/PaginationGroupChangeBtn/PaginationGroupChangeBtn";
+import { useWindowSize } from "../../../../hooks/useWindowSize";
+import classNames from "classnames";
 import "./ProductsSection.css";
-
-const REQUEST_PAGE_SIZE = 10;
 
 export function ProductsSection() {
   // todo: state 깔끔하게 정리, isLoading 구현
   const [products, setProducts] = useState([]);
   const [activePage, setActivePage] = useState(1);
+  const [requestPageSize, setRequestPageSize] = useState(10);
   const [order, setOrder] = useState("recent");
   const [keyword, setKeyword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { width } = useWindowSize();
+  const [windowState, setWindowState] = useState(
+    width < 744 ? "mobile" : width < 1200 ? "tablet" : "desktop"
+  );
 
   // pagination 관련
   const [productsTotalCount, setProductsTotalCount] = useState(0);
@@ -61,11 +66,11 @@ export function ProductsSection() {
   useEffect(() => {
     handleLoadProducts({
       page: activePage,
-      pageSize: REQUEST_PAGE_SIZE,
+      pageSize: requestPageSize,
       orderBy: order,
       keyword: keyword,
     });
-  }, [activePage, order]);
+  }, [activePage, requestPageSize, order]);
 
   useEffect(() => {
     debouncedLoadProduct({ keyword: keyword.trim() });
@@ -93,7 +98,7 @@ export function ProductsSection() {
   };
 
   // 페이지네이션
-  const pageCount = Math.ceil(productsTotalCount / REQUEST_PAGE_SIZE);
+  const pageCount = Math.ceil(productsTotalCount / requestPageSize);
   const pageArray = Array.from({ length: pageCount }, (_, i) => i + 1);
   const pageGroupSize = 5;
   const nextStartPage = startPage + pageGroupSize;
@@ -114,6 +119,24 @@ export function ProductsSection() {
     return page === activePage ? "active" : "";
   };
 
+  // 반응형 웹
+  const productStyleImgWidth = width <= 375 ? "16.8rem" : "22.1rem";
+  const productsClassName = classNames("products", {
+    tablet: width < 1199 && width >= 744,
+    mobile: width < 744,
+  });
+
+  useEffect(() => {
+    const currentWindowState =
+      width < 744 ? "mobile" : width < 1200 ? "tablet" : "desktop";
+    if (currentWindowState !== windowState) {
+      setWindowState(() => currentWindowState);
+      setRequestPageSize(() => {
+        return currentWindowState === "mobile" ? 4 : "tablet" ? 6 : 10;
+      });
+    }
+  }, [width, windowState]);
+
   return (
     <div className="products-section">
       <div className="section-top-wrap">
@@ -132,7 +155,7 @@ export function ProductsSection() {
         </div>
       </div>
       {/* {isLoading && <div className="loadingMsg">로딩중</div>} */}
-      <div className="products">
+      <div className={productsClassName}>
         {products.map((item) => {
           const { id, images, name, price, favoriteCount } = item;
           return (
@@ -142,7 +165,7 @@ export function ProductsSection() {
               name={name}
               price={price}
               favoriteCount={favoriteCount}
-              styleImgWidth="22.1rem"
+              styleImgWidth={productStyleImgWidth}
             />
           );
         })}

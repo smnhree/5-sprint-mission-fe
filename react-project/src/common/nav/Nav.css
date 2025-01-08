@@ -19,6 +19,26 @@
   border-bottom: 0.1rem solid #dfdfdf;
 }
 
-.nav-logo-menus-wrap {
+.nav.tablet,
+.nav.mobile {
+  padding: 0 2rem;
+}
+
+.nav .nav-logo-menus-wrap {
   gap: 2.4rem;
+}
+
+.nav .button-wrap.tablet,
+.nav .button-wrap.mobile {
+  display: none;
+}
+
+.nav .profile-ic {
+  display: none;
+}
+
+.nav .profile-ic.tablet,
+.nav .profile-ic.mobile {
+  display: flex;
+  align-items: center;
 }
