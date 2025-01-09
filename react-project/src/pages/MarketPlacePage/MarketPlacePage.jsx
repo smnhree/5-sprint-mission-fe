@@ -1,18 +1,22 @@
-import { Footer } from "../../common/footer/Footer";
-import { Nav } from "../../common/nav/Nav";
-import { BestProductsSection } from "./feature/BestProductsSection/BestProductsSection";
-import { ProductsSection } from "./feature/ProductSection/ProductsSection";
-import "./MarketPlacePage.css";
+import { NavSection } from "../../components/NavSection/NavSection";
+import { BestProductsList } from "./section/BestProductsList/BestProductsList";
+import { ProductsList } from "./section/ProductsList/ProductsList";
+import { FooterSection } from "../../components/FooterSection/FooterSection";
+import "./MarketplacePage.css";
 
-export function MarketPlacePage() {
+export function MarketplacePage() {
   return (
     <div className="market-place-page">
-      <Nav />
-      <main className="sections-wrap">
-        <BestProductsSection />
-        <ProductsSection />
+      <NavSection />
+      <main className="main">
+        <section>
+          <BestProductsList />
+        </section>
+        <section>
+          <ProductsList />
+        </section>
       </main>
-      <Footer />
+      <FooterSection />
     </div>
   );
 }

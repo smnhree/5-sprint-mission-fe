@@ -1,12 +1,11 @@
-import "./style/reset.css";
-import "./style/font.css";
-import "./style/color.css";
+import "./styles/reset.css";
+import "./styles/font.css";
+import "./styles/color.css";
 import "./App.css";
-
-import { MarketPlacePage } from "./pages/MarketPlacePage/MarketPlacePage";
+import { MarketplacePage } from "./pages/MarketplacePage/MarketplacePage";
 
 function App() {
-  return <MarketPlacePage />;
+  return <MarketplacePage />;
 }
 
 export default App;

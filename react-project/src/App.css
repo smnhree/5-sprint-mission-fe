@@ -19,6 +19,7 @@ a {
   cursor: pointer;
 }
 
-button > img {
+button > img,
+a > img {
   width: 100%;
 }
