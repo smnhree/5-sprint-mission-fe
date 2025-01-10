@@ -55,11 +55,6 @@ export function ProductsList() {
   const debouncedLoadProduct = debounce(handleLoadProducts, 1000);
 
   // useEffect
-  // 초기 데이터 불러오기
-  useEffect(() => {
-    handleLoadProducts();
-  }, []);
-
   // page, screenType, order 변경 시 데이터 불러오기
   useEffect(() => {
     handleLoadProducts({
