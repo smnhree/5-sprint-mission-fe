@@ -1,4 +1,5 @@
 import heartIc from "../../assets/icons/product_card_heart.png";
+import noImgSrcImage from "../../assets/imgs/product_no_img.png";
 import "./ProductCard.css";
 
 export function ProductCard({
@@ -8,6 +9,7 @@ export function ProductCard({
   favoriteCount,
   imgWidth = "28.2rem",
 }) {
+  // todo: 인라인, css 스타일 통일하기
   const style = {
     a: {
       width: imgWidth,

@@ -4,9 +4,9 @@
   gap: 1.6rem;
 }
 
-.product .product-img:hover {
+/* .product .product-img:hover {
   box-shadow: 0 0 0.4rem #000000;
-}
+} */
 
 .product .product-info {
   display: flex;

@@ -16,12 +16,13 @@
   line-height: 2.6rem;
 }
 
-.dropdown .최신순 {
+.dropdown .recent {
   border-top-left-radius: 1.2rem;
   border-top-right-radius: 1.2rem;
+  border-bottom: none;
 }
 
-.dropdown .좋아요순 {
+.dropdown .favorite {
   border-bottom-left-radius: 1.2rem;
   border-bottom-right-radius: 1.2rem;
 }

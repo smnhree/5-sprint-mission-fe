@@ -4,10 +4,10 @@ import "./Dropdown.css";
 export function Dropdown({ onClick }) {
   return (
     <div className="dropdown">
-      <button className="최신순" onClick={() => onClick("recent")}>
+      <button className="recent" onClick={() => onClick("recent")}>
         최신순
       </button>
-      <button className="좋아요순" onClick={() => onClick("favorite")}>
+      <button className="favorite" onClick={() => onClick("favorite")}>
         좋아요순
       </button>
     </div>

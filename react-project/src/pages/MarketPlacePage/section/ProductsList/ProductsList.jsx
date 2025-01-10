@@ -1,35 +1,32 @@
 import { useEffect, useState } from "react";
 import { useScreenType } from "../../../../hooks/useScreenType";
 import { productService } from "../../../../services/ProductService";
-
 import { ProductCard } from "../../../../components/ProductCard/ProductCard";
 import { PageButton } from "../../../../components/button/pagination/PageButton/PageButton";
-import { Input } from "../../../../components/Input/Input";
+import { SearchInput } from "../../../../components/Input/SearchInput/SearchInput";
 import { Dropdown } from "../../../../components/Dropdown/Dropdown";
 import { PrimaryButton } from "../../../../components/button/PrimaryButton/PrimaryButton";
 import { PageGroupChangeButton } from "../../../../components/button/pagination/PageGroupChangeButton/PageGroupChangeButton";
-
+import arrowDownIc from "../../../../assets/icons/arrow_down.png";
+import sortIc from "../../../../assets/icons/sort.png";
 import "./ProductsList.css";
 
 export function ProductsList() {
   // todo: state 깔끔하게 정리, isLoading 구현
-  // 화면 사이즈
   const screenType = useScreenType();
-  // 데이터 요청 관련 상태
   const [products, setProducts] = useState([]);
-  const [activePage, setActivePage] = useState(1);
-  const [requestPageSize, setRequestPageSize] = useState(10);
-  const [order, setOrder] = useState("recent");
-  const [keyword, setKeyword] = useState("");
-  // pagination 관련
+  const [productsListOption, setProductsListOption] = useState({
+    activePage: 1,
+    requestPageSize: 10,
+    order: "recent",
+    keyword: "",
+  });
   const [productsTotalCount, setProductsTotalCount] = useState(0);
   const [startPage, setStartPage] = useState(1);
-  // dropdown 관련
-  const [isSortDropdownActive, setIsSortDropdownActive] = useState(false);
-  // loading 관련
+  const [isDropdownActive, setIsDropdownActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // 데이터 불러오는 함수
+  // 데이터 불러오기
   const handleLoadProducts = async (options) => {
     let result;
     try {
@@ -66,46 +63,61 @@ export function ProductsList() {
   // page, screenType, order 변경 시 데이터 불러오기
   useEffect(() => {
     handleLoadProducts({
-      page: activePage,
-      pageSize: requestPageSize,
-      orderBy: order,
-      keyword: keyword.trim(),
+      page: productsListOption.activePage,
+      pageSize: productsListOption.requestPageSize,
+      orderBy: productsListOption.order,
+      keyword: productsListOption.keyword,
     });
-  }, [activePage, requestPageSize, order]);
+  }, [
+    productsListOption.activePage,
+    productsListOption.requestPageSize,
+    productsListOption.order,
+  ]);
 
   // keyword 변경 시 디바운스걸고 데이터 불러오기
   useEffect(() => {
     debouncedLoadProduct({
-      page: activePage,
-      pageSize: requestPageSize,
-      orderBy: order,
-      keyword: keyword.trim(),
+      page: productsListOption.activePage,
+      pageSize: productsListOption.requestPageSize,
+      orderBy: productsListOption.order,
+      keyword: productsListOption.keyword,
     });
-  }, [keyword]);
+  }, [productsListOption.keyword]);
 
   // handle state(page, order, keyword) 함수
   const handlePage = (value) => {
-    setActivePage(() => value);
+    setProductsListOption((prev) => ({
+      ...prev,
+      activePage: value,
+    }));
   };
 
   const handleOrder = (value) => {
-    setOrder(() => value);
-    handlePage(1);
+    setProductsListOption((prev) => ({
+      ...prev,
+      activePage: 1,
+      order: value,
+    }));
     setStartPage(() => 1);
-    setIsSortDropdownActive((prev) => !prev);
+    setIsDropdownActive((prev) => !prev);
   };
 
   const handleKeyword = (e) => {
-    setKeyword(() => e.target.value);
+    setProductsListOption((prev) => ({
+      ...prev,
+      keyword: e.target.value,
+    }));
   };
 
   // dropdown 함수
   const toggleDropdown = () => {
-    setIsSortDropdownActive((prev) => !prev);
+    setIsDropdownActive((prev) => !prev);
   };
 
   // 페이지네이션
-  const pageCount = Math.ceil(productsTotalCount / requestPageSize);
+  const pageCount = Math.ceil(
+    productsTotalCount / productsListOption.requestPageSize
+  );
   const pagesArray = Array.from({ length: pageCount }, (_, i) => i + 1);
   const pageGroupSize = 5;
   const nextStartPage = startPage + pageGroupSize;
@@ -125,15 +137,7 @@ export function ProductsList() {
   };
   // 페이지 버튼 클릭 시 색깔 바꾸는 함수 todo: 이렇게 말고 다르게 해보기
   const getPaginationBtnClassName = (page) => {
-    return page === activePage ? "active" : "";
-  };
-
-  // 화면 줄였다가 늘어날 때 현재 페이지에 데이터가 없다면 마지막 페이지로 이동
-  const moveLastPage = () => {
-    if (activePage > pagesArray.length) {
-      setActivePage(pagesArray.length);
-      setStartPage(pageCount);
-    }
+    return page === productsListOption.activePage ? "active" : "";
   };
 
   // 반응형 웹
@@ -141,54 +145,73 @@ export function ProductsList() {
 
   useEffect(() => {
     if (screenType === "desktop") {
-      setRequestPageSize(() => 10);
+      setProductsListOption((prev) => ({
+        ...prev,
+        activePage: 1,
+        requestPageSize: 10,
+      }));
     } else if (screenType === "tablet") {
-      setRequestPageSize(() => 6);
+      setProductsListOption((prev) => ({
+        ...prev,
+        activePage: 1,
+        requestPageSize: 6,
+      }));
     } else if (screenType === "mobile") {
-      setRequestPageSize(() => 4);
+      setProductsListOption((prev) => ({
+        ...prev,
+        activePage: 1,
+        requestPageSize: 4,
+      }));
     }
+    setStartPage(1);
   }, [screenType]);
 
-  // useEffect(() => {
-  //   const newLastPage = Math.ceil(productsTotalCount / requestPageSize);
-  //   if (activePage > newLastPage) {
-  //     let newStartPage;
-  //     if (newLastPage % pageGroupSize === 0) {
-  //       newStartPage = newLastPage - requestPageSize + 1;
-  //     } else {
-  //       newStartPage = newLastPage - (newLastPage % pageGroupSize) + 1;
-  //     }
-  //     setActivePage(newLastPage);
-  //   } else {
-  //     handleLoadProducts({
-  //       page: activePage,
-  //       pageSize: requestPageSize,
-  //       orderBy: order,
-  //       keyword: keyword.trim(),
-  //     });
-  //   }
-  //   // setActivePage(pagesArray.length); // startPage가 문제야!
-  // }, [requestPageSize]);
-
   return (
-    <div className="products-list">
-      <div className="top-wrap">
+    <div className={`products-list ${screenType}`}>
+      <div className={`top-wrap ${screenType}`}>
         <div className="list-title">판매 중인 상품</div>
-        <div className="controller">
-          <Input keyword={keyword} onChange={handleKeyword} />
+        <div className="search-input-wrap">
+          <SearchInput
+            keyword={productsListOption.keyword}
+            onChange={handleKeyword}
+            width={
+              screenType === "tablet"
+                ? "24.2rem"
+                : screenType === "mobile"
+                ? "28.8rem"
+                : "32.5rem"
+            }
+          />
+        </div>
+        <div className="upload-button-wrap">
           <PrimaryButton text="상품 등록하기" width="13.3rem" />
-          {/* // todo: 아래 버튼과 dropdownbox 하나로 묶어서 컴포넌트로 하기 */}
-          <div className="dropdown-wrap">
-            <button className="dropdown-toggle-button" onClick={toggleDropdown}>
-              최신순
+        </div>
+        {/* // todo: 아래 버튼과 dropdownbox 하나로 묶어서 컴포넌트로 하기 */}
+        <div className="dropdown-wrap">
+          {screenType !== "mobile" && (
+            <button
+              className={`dropdown-toggle-button ${screenType}`}
+              onClick={toggleDropdown}
+            >
+              <span className="order-text">
+                {productsListOption.order === "recent" ? "최신순" : "좋아요순"}
+              </span>
+              <img className="arrow-down" src={arrowDownIc} alt="click" />
             </button>
-            {isSortDropdownActive && <Dropdown onClick={handleOrder} />}
-          </div>
+          )}
+          {isDropdownActive && <Dropdown onClick={handleOrder} />}
+          {screenType === "mobile" && (
+            <button
+              className={`dropdown-toggle-button ${screenType}`}
+              onClick={toggleDropdown}
+            >
+              <img className="sortIc" src={sortIc} alt="정렬" />
+            </button>
+          )}
+          {isDropdownActive && <Dropdown onClick={handleOrder} />}
         </div>
       </div>
-
       {/* {isLoading && <div className="loadingMsg">로딩중</div>} */}
-
       <div className={`products ${screenType}`}>
         {products.map((item) => {
           const { id, images, name, price, favoriteCount } = item;
