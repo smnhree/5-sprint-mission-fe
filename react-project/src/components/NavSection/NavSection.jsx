@@ -14,13 +14,12 @@ export function NavSection() {
         <a className={`logo ${screenType}`}>
           <img src={logoSrc} alt="판다마켓" />
         </a>
-        {/* // todo: menu -> components로 분리 고민 */}
         <div className={`menus ${screenType}`}>
           <a className="menu">자유게시판</a>
           <a className="menu">중고마켓</a>
         </div>
       </div>
-      {/* // todo: 버튼, 프로팔사진 true/false로 안보이게 처리하기 */}
+      {/* // todo: 버튼, 프로필사진 true/false로 안보이게 처리하기 */}
       <div className={`right-wrap ${screenType}`}>
         <div className={`button-wrap ${screenType}`}>
           <PrimaryButton text="로그인" />

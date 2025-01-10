@@ -9,7 +9,7 @@ export function ProductCard({
   favoriteCount,
   imgWidth = "28.2rem",
 }) {
-  // todo: 인라인, css 스타일 통일하기
+  // todo: 스타일(인라인/css/...) 통일하기, 이미지 없거나 잘못된 경로는 기본 이미지 띄우기
   const style = {
     a: {
       width: imgWidth,

@@ -4,7 +4,6 @@ import youtubeIc from "../../assets/icons/sns/youtube.png";
 import instagramIc from "../../assets/icons/sns/instagram.png";
 import "./FooterSection.css";
 
-// todo: 반응형 웹 적용
 export function FooterSection() {
   return (
     <div className="footer">
@@ -13,7 +12,6 @@ export function FooterSection() {
         <a>Privacy Policy</a>
         <a>FAQ</a>
       </div>
-      {/* // todo: snsIcons -> components로 분리 고민 */}
       <div className="sns-icons">
         <a href="https://www.facebook.com/?locale=ko_KR" target="_blank">
           <img src={facebookIc} alt="페이스북" />

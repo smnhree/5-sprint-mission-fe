@@ -1,7 +1,7 @@
 import "./SearchInput.css";
 
 export function SearchInput({ keyword, onChange, width = "32.5rem" }) {
-  // todo: style 인라인, css 정리
+  // todo: todo: 스타일(인라인/css/...) 통일하기
 
   const inputStyle = {
     width,
