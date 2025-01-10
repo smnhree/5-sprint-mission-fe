@@ -16,11 +16,6 @@ export function BestProductsList() {
 
   const imageWidth = screenType === "desktop" ? "28.2rem" : "34.3rem";
 
-  // 초기 데이터 불러오기
-  useEffect(() => {
-    handleLoadProducts({ page: 1, pageSize: 4, orderBy: "favorite" });
-  }, []);
-
   // screenType 바뀌면 데이터 다시 불러오기
   useEffect(() => {
     if (screenType === "desktop") {
