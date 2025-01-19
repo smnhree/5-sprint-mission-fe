@@ -1,21 +1,165 @@
 import { Link } from "react-router-dom";
-import Item from "./components/item.jsx";
+import { useEffect, useState } from "react";
 import Button from "../../common/Button.jsx";
 import InputTextarea from "../../common/InputTextarea.jsx";
-import dropDownArrowIcon from "../../assets/icon/ic_dropdown_arrow.png";
+import Item from "./components/item.jsx";
 import PageButton from "./components/PageButton.jsx";
-import MOCK_DATA from "./mockData.js";
-import { useState } from "react";
+import getRenderingData from "./api.js";
+import DropdownList from "./components/DropdownList.jsx";
+
+/*
+1. 초기 랜더링
+  - useEffect(api요청) 동작: apiQuery 기본 셋팅값으로 데이터 불러와.(함수 가제 requestApi) ok
+  - useEffect(pageBar 그룹 바뀜) 동작: apiQuery 기본 셋팅값으로 불러온 데이터를 기준으로 pageBar 랜더링 ok
+
+2. 변화1(페이지가 바뀜) - handleClickPageButton
+  - setPageBar(activePage): 사용자가 페이지 버튼 클릭 -> pageButton 스타일 바뀜 ok
+  - useEffect(api요청) 동작: setPageBar(activePage) -> useEffect로 인해 requestApi 실행돼서 데이터 새로 불러옴 ok
+
+3. 변화2(정렬이 바뀜)
+  - setApiQuery(order): 사용자가 정렬 바꿈 ok
+  - setPageBar(activePage, currentStartPage): 1페이지로 초기화 ok
+  - useEffect(api요청) 동작: seEffect로 인해 requestApi 실행돼서 데이터 새로 불러옴 ok
+  - 
+4. 변화3(화면 크기가 바뀜)
+  - useEffect(api 요청) 동작: 사용자 화면 크기에 따라 limit 바뀜 -> apiQuery에서 limit 바껴(limit제외 query 전부 초기화) -> useEffect로 인해 requestApi 실행돼서 데이터 새로 불러옴
+  - 
+5. 변화4(페이지 그룹 바뀜) - handleClickPrevPageGroupButton, handleClickNextPageGroupButton
+  - setPageBar(currentStartPage, activePage): 사용자가 그룹 이전/이후 버튼 클릭 -> 그룹 시작페이지, 활성화 페이지 바뀜 ok
+  - useEffect(pageBar 그룹 바뀜): setPageBar -> 페이지바 새로 렌더링 ok
+  - useEffect(api 요청): setPageBar(activePage) -> useEffect로 인해 requestApi 실행돼서 새로 데이터 불러옴 ok
+*/
 
 function ItemsPage() {
-  const [pageSize, setPageSize] = useState(10);
-  const [activePage, setActivePage] = useState(1);
+  // **utility**
+  function getOffset(activePage, limit) {
+    return activePage * limit;
+  }
 
-  const pageCount = Math.ceil(MOCK_DATA.length / pageSize);
-  const pageArray = Array.from({ length: pageCount }, (_, index) => index + 1);
+  function getTotalPageList(dataTotalCount, limit) {
+    return Array.from(
+      { length: Math.ceil(dataTotalCount / limit) },
+      (_, index) => index
+    );
+  }
 
-  const startIndex = pageSize * (activePage - 1);
-  const data = MOCK_DATA.slice(startIndex, startIndex + pageSize);
+  function isActiveNextPageGroupChangeButton(
+    dataTotalCount,
+    limit,
+    currentStartPage,
+    groupSize
+  ) {
+    const totalPageList = getTotalPageList(dataTotalCount, limit);
+    const lastPage = totalPageList[totalPageList.length - 1];
+    return currentStartPage + groupSize <= lastPage;
+  }
+
+  // *** state ***
+  // api 요청 관련 state
+  const [apiQuery, setApiQuery] = useState({
+    limit: 5,
+    order: "recent",
+    keyword: "",
+  }); // offset은 pageBar에 의해 바뀜
+
+  // 데이터 관련 state
+  const [data, setData] = useState({
+    renderingData: [],
+    totalCount: 0,
+  });
+
+  // 페이지 관련 state
+  const [pageBar, setPageBar] = useState({
+    groupSize: 5,
+    currentStartPage: 0,
+    currentPageList: [],
+    activePage: 0,
+  });
+
+  // 그외 state
+  const [isActiveDropdown, setIsActiveDropdown] = useState(false);
+
+  // *** useEffect ***
+  // 데이터 불러오기
+  useEffect(() => {
+    console.log("데이터를 새로 불러오기 시작합니다.");
+    const { renderingData, totalCount } = getRenderingData(
+      getOffset(pageBar.activePage, apiQuery.limit),
+      apiQuery.limit,
+      apiQuery.order
+    );
+    setData((prev) => ({
+      ...prev,
+      renderingData,
+      totalCount,
+    }));
+    console.log("useEffect", data.renderingData);
+  }, [pageBar.activePage, apiQuery]); // 사용자 요청에 따라 바뀜(activePage - handleClickPageButton, order - handleClickOrderButton(가제), limit - 화면 크기)
+
+  // 페이지바 그룹 불러오기
+  useEffect(() => {
+    const totalPageList = getTotalPageList(data.totalCount, apiQuery.limit);
+    const updatedCurrentPageList = totalPageList.slice(
+      pageBar.currentStartPage,
+      pageBar.currentStartPage + pageBar.groupSize
+    );
+    setPageBar((prev) => ({
+      ...prev,
+      currentPageList: updatedCurrentPageList,
+    }));
+  }, [data.totalCount, pageBar.currentStartPage]); // data.totalCount -> 데이터 요청될때 바뀔 수 있음, currentStartPage -> 사용자 요청에 따라 바뀜
+
+  // *** 핸들러 ***
+  // 페이지 버튼 클릭
+  const handleClickPageButton = (page) => {
+    console.log("페이지 버튼이 클릭되었습니다.");
+    const updatedActivePage = page;
+    setPageBar((prev) => ({
+      ...prev,
+      activePage: updatedActivePage,
+    }));
+    console.log("pageButton", apiQuery.limit);
+  };
+
+  // 페이지 그룹 변경 버튼(<, >) 클릭
+  const handleClickPageGroupChangeButton = {
+    prev: () => {
+      const updatedStartPage = pageBar.currentStartPage - pageBar.groupSize;
+      setPageBar((prev) => ({
+        ...prev,
+        currentStartPage: updatedStartPage,
+        activePage: updatedStartPage,
+      }));
+      console.log("prevButton", apiQuery.limit);
+    },
+    next: () => {
+      const updatedStartPage = pageBar.currentStartPage + pageBar.groupSize;
+      setPageBar((prev) => ({
+        ...prev,
+        currentStartPage: updatedStartPage,
+        activePage: updatedStartPage,
+      }));
+      console.log("nextButton", apiQuery.limit);
+    },
+  };
+
+  // 드롭다운 열고 닫기
+  const handleClickDropdown = () => {
+    setIsActiveDropdown((prev) => !prev);
+  };
+
+  // 정렬 바꾸기
+  const handleClickOrderButton = (order) => {
+    setApiQuery((prev) => ({
+      ...prev,
+      order,
+    }));
+    setPageBar((prev) => ({
+      ...prev,
+      currentStartPage: 0,
+      activePage: 0,
+    }));
+  };
 
   return (
     <main className="flex justify-center pt-[26px] pb-[140px]">
@@ -35,21 +179,17 @@ function ItemsPage() {
                 상품 등록하기
               </Button>
             </Link>
-            <div className="flex items-center justify-between w-[130px] h-[42px] px-[20px] py-[12px] rounded-[12px] border-[1px] border-secondary-200">
-              <span className="text-[16px] font-[400] text-secondary-800">
-                최신순
-              </span>
-              <img
-                src={dropDownArrowIcon}
-                alt="▼"
-                className="w-[15.7px] h-[7.42px]"
-              />
-            </div>
+            <DropdownList
+              onClick={() => handleClickDropdown()}
+              onClickOrderButton={handleClickOrderButton}
+              isActive={isActiveDropdown}
+            />
           </div>
         </header>
         <ul className="grid grid-cols-5 gap-[24px]">
-          {data.map((item) => (
+          {data.renderingData.map((item) => (
             <Item
+              key={item.id}
               name={item.title}
               price={item.price}
               favoriteCount={item.favorite}
@@ -57,11 +197,31 @@ function ItemsPage() {
           ))}
         </ul>
         <footer className="flex justify-center gap-[4px] pt-[19px]">
-          <PageButton content="<" />
-          {pageArray.map((page) => (
-            <PageButton content={page} />
+          <PageButton
+            disabled={pageBar.currentStartPage <= 0}
+            content="<"
+            onClick={() => handleClickPageGroupChangeButton.prev()}
+          />
+          {pageBar.currentPageList.map((page) => (
+            <PageButton
+              key={page}
+              content={page + 1}
+              isActive={pageBar.activePage === page}
+              onClick={() => handleClickPageButton(page)}
+            />
           ))}
-          <PageButton content=">" />
+          <PageButton
+            disabled={
+              !isActiveNextPageGroupChangeButton(
+                data.totalCount,
+                apiQuery.limit,
+                pageBar.currentStartPage,
+                pageBar.groupSize
+              )
+            }
+            content=">"
+            onClick={() => handleClickPageGroupChangeButton.next()}
+          />
         </footer>
       </section>
     </main>
