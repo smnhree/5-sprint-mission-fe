@@ -1,10 +1,15 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import {
+  getOffset,
+  getTotalPageList,
+  isActiveNextPageGroupChangeButton,
+} from "../../utils/paginationUtils.js";
 import Button from "../../common/Button.jsx";
 import InputTextarea from "../../common/InputTextarea.jsx";
 import Item from "./components/item.jsx";
 import PageButton from "./components/PageButton.jsx";
-import getRenderingData from "./api.js";
+import ProductService from "../../services/ProductService.js";
 import DropdownList from "./components/DropdownList.jsx";
 
 /*
@@ -28,36 +33,15 @@ import DropdownList from "./components/DropdownList.jsx";
   - setPageBar(currentStartPage, activePage): 사용자가 그룹 이전/이후 버튼 클릭 -> 그룹 시작페이지, 활성화 페이지 바뀜 ok
   - useEffect(pageBar 그룹 바뀜): setPageBar -> 페이지바 새로 렌더링 ok
   - useEffect(api 요청): setPageBar(activePage) -> useEffect로 인해 requestApi 실행돼서 새로 데이터 불러옴 ok
+
+6. 변화5(키워드 바뀜) ok
 */
 
 function ItemsPage() {
-  // **utility**
-  function getOffset(activePage, limit) {
-    return activePage * limit;
-  }
-
-  function getTotalPageList(dataTotalCount, limit) {
-    return Array.from(
-      { length: Math.ceil(dataTotalCount / limit) },
-      (_, index) => index
-    );
-  }
-
-  function isActiveNextPageGroupChangeButton(
-    dataTotalCount,
-    limit,
-    currentStartPage,
-    groupSize
-  ) {
-    const totalPageList = getTotalPageList(dataTotalCount, limit);
-    const lastPage = totalPageList[totalPageList.length - 1];
-    return currentStartPage + groupSize <= lastPage;
-  }
-
   // *** state ***
   // api 요청 관련 state
   const [apiQuery, setApiQuery] = useState({
-    limit: 5,
+    limit: 10,
     order: "recent",
     keyword: "",
   }); // offset은 pageBar에 의해 바뀜
@@ -81,19 +65,29 @@ function ItemsPage() {
 
   // *** useEffect ***
   // 데이터 불러오기
-  useEffect(() => {
-    console.log("데이터를 새로 불러오기 시작합니다.");
-    const { renderingData, totalCount } = getRenderingData(
-      getOffset(pageBar.activePage, apiQuery.limit),
-      apiQuery.limit,
-      apiQuery.order
-    );
+  const loadProductList = async (options) => {
+    let result;
+    try {
+      result = await ProductService.getProductList(options);
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+    const { message, data, totalCount } = result;
     setData((prev) => ({
       ...prev,
-      renderingData,
+      renderingData: data,
       totalCount,
     }));
-    console.log("useEffect", data.renderingData);
+  };
+
+  useEffect(() => {
+    loadProductList({
+      sort: apiQuery.order,
+      offset: getOffset(pageBar.activePage, apiQuery.limit),
+      limit: apiQuery.limit,
+      keyword: apiQuery.keyword,
+    });
   }, [pageBar.activePage, apiQuery]); // 사용자 요청에 따라 바뀜(activePage - handleClickPageButton, order - handleClickOrderButton(가제), limit - 화면 크기)
 
   // 페이지바 그룹 불러오기
@@ -112,13 +106,11 @@ function ItemsPage() {
   // *** 핸들러 ***
   // 페이지 버튼 클릭
   const handleClickPageButton = (page) => {
-    console.log("페이지 버튼이 클릭되었습니다.");
     const updatedActivePage = page;
     setPageBar((prev) => ({
       ...prev,
       activePage: updatedActivePage,
     }));
-    console.log("pageButton", apiQuery.limit);
   };
 
   // 페이지 그룹 변경 버튼(<, >) 클릭
@@ -159,6 +151,21 @@ function ItemsPage() {
       currentStartPage: 0,
       activePage: 0,
     }));
+    setIsActiveDropdown((prev) => !prev);
+  };
+
+  // 검색
+  const handleChangeInput = (e) => {
+    const updatedInputValue = e.target.value;
+    setPageBar((prev) => ({
+      ...prev,
+      currentStartPage: 0,
+      activePage: 0,
+    }));
+    setApiQuery((prev) => ({
+      ...prev,
+      keyword: updatedInputValue,
+    }));
   };
 
   return (
@@ -172,6 +179,8 @@ function ItemsPage() {
             <InputTextarea
               InputOrTextarea="input"
               placeholder="검색할 상품을 입력해주세요"
+              onChange={handleChangeInput}
+              value={apiQuery.keyword}
               classNames="w-[325px] h-[42px] px-[20px] py-[9px]"
             />
             <Link to="/registration">
@@ -180,6 +189,7 @@ function ItemsPage() {
               </Button>
             </Link>
             <DropdownList
+              currentOrder={apiQuery.order}
               onClick={() => handleClickDropdown()}
               onClickOrderButton={handleClickOrderButton}
               isActive={isActiveDropdown}
@@ -190,7 +200,7 @@ function ItemsPage() {
           {data.renderingData.map((item) => (
             <Item
               key={item.id}
-              name={item.title}
+              name={item.name}
               price={item.price}
               favoriteCount={item.favorite}
             />

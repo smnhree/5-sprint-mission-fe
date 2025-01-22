@@ -1,13 +1,17 @@
 function InputTextarea({
-  InputOrTextarea,
+  InputOrTextarea = "input",
   placeholder,
   classNames,
-  label = undefined,
+  id = undefined,
+  onChange,
+  ...props
 }) {
   return (
     <InputOrTextarea
       placeholder={placeholder}
-      className={`${label} rounded-[12px] px-[24px] py-[16px] bg-secondary-100 text-secondary-400 focus:outline-[1px] focus:outline-primary-100 ${classNames}`}
+      onChange={InputOrTextarea === "input" ? onChange : undefined}
+      className={`${id} rounded-[12px] px-[24px] py-[16px] bg-secondary-100 text-secondary-400 focus:outline-[1px] focus:outline-primary-100 ${classNames}`}
+      {...props}
     />
   );
 }

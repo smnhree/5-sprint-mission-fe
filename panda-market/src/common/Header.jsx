@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import icLogo from "../assets/logo/ic_panda.png";
 import nameLogo from "../assets/logo/name_panda.png";
 import Button from "../common/Button.jsx";
@@ -7,11 +7,11 @@ function Header({ isMenuVisible }) {
   const menus = [
     {
       title: "자유게시판",
-      path: null,
+      path: "/board",
     },
     {
       title: "중고마켓",
-      path: null,
+      path: "/items",
     },
   ];
 
@@ -24,6 +24,12 @@ function Header({ isMenuVisible }) {
       height: isMenuVisible ? "h-[42px]" : "h-[48px]",
     },
   };
+
+  function getLinkStyle({ isActive }) {
+    return {
+      color: isActive ? "#3692FF" : undefined,
+    };
+  }
 
   return (
     <header
@@ -44,9 +50,14 @@ function Header({ isMenuVisible }) {
           {isMenuVisible && (
             <nav className="flex">
               {menus.map((menu) => (
-                <div className="px-[15px] py-[21px] text-[18px] font-[700] leading-[26px] text-secondary-600">
+                <NavLink
+                  to={menu.path}
+                  key={menu.title}
+                  style={getLinkStyle}
+                  className="px-[15px] py-[21px] text-[18px] font-[700] leading-[26px] text-secondary-600"
+                >
                   {menu.title}
-                </div>
+                </NavLink>
               ))}
             </nav>
           )}
