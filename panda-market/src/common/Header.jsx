@@ -36,7 +36,7 @@ function Header({ isMenuVisible }) {
               <img
                 src={icLogo}
                 alt="🐼"
-                className="w-[40px] h-[40px] mobile:hidden"
+                className="w-[40px] h-[40px] tablet:block mobile:hidden"
               />
               <img
                 src={nameLogo}

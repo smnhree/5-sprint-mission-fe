@@ -64,6 +64,7 @@ function ItemsPage() {
   // 그외 state
   const [isActiveDropdown, setIsActiveDropdown] = useState(false);
   const screenType = useScreenType();
+  const [inputTemp, setInputTemp] = useState("");
 
   // *** useEffect ***
   // 데이터 불러오기
@@ -140,6 +141,21 @@ function ItemsPage() {
     }
   }, [screenType]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPageBar((prev) => ({
+        ...prev,
+        currentStartPage: 0,
+        activePage: 0,
+      }));
+      setApiQuery((prev) => ({
+        ...prev,
+        keyword: inputTemp,
+      }));
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [inputTemp]);
+
   // *** 핸들러 ***
   // 페이지 버튼 클릭
   const handleClickPageButton = (page) => {
@@ -191,20 +207,6 @@ function ItemsPage() {
     setIsActiveDropdown((prev) => !prev);
   };
 
-  // 검색
-  const handleChangeInput = (e) => {
-    const updatedInputValue = e.target.value;
-    setPageBar((prev) => ({
-      ...prev,
-      currentStartPage: 0,
-      activePage: 0,
-    }));
-    setApiQuery((prev) => ({
-      ...prev,
-      keyword: updatedInputValue,
-    }));
-  };
-
   return (
     <main className="flex justify-center pt-[26px] pb-[140px]">
       <section className="pc:w-[1200px] tablet:w-[740px] mobile:w-[400px] flex flex-col gap-[24px]">
@@ -217,8 +219,8 @@ function ItemsPage() {
               <InputTextarea
                 InputOrTextarea="input"
                 placeholder="검색할 상품을 입력해주세요"
-                onChange={handleChangeInput}
-                value={apiQuery.keyword}
+                onChange={(e) => setInputTemp(() => e.target.value)}
+                value={inputTemp}
                 classNames="pc:w-[325px] tablet:w-[250px] h-[42px] px-[20px] py-[9px]"
               />
               <Link to="/registration">
@@ -229,7 +231,7 @@ function ItemsPage() {
               <DropdownList
                 currentOrder={apiQuery.order}
                 onClick={() => handleClickDropdown()}
-                onClickOrderButton={handleClickOrderButton}
+                onChange={(e) => setInputTemp(() => e.target.value)}
                 isActive={isActiveDropdown}
               />
             </div>
