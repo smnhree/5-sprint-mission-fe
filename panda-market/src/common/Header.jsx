@@ -15,16 +15,6 @@ function Header({ isMenuVisible }) {
     },
   ];
 
-  const style = {
-    header: {
-      padding: isMenuVisible ? "px-[200px]" : "px-[400px]",
-    },
-    button: {
-      width: isMenuVisible ? "w-[88px]" : "w-[128px]",
-      height: isMenuVisible ? "h-[42px]" : "h-[48px]",
-    },
-  };
-
   function getLinkStyle({ isActive }) {
     return {
       color: isActive ? "#3692FF" : undefined,
@@ -33,13 +23,21 @@ function Header({ isMenuVisible }) {
 
   return (
     <header
-      className={`flex w-full h-[70px] ${style.header.padding} border-b-[1px] border-[#DFDFDF]`}
+      className={`flex w-full h-[70px] border-b-[1px] border-[#DFDFDF] ${
+        isMenuVisible
+          ? "pc:px-[200px] tablet:px-[20px] mobile: px-[20px]"
+          : "pc:px-[400px] tablet:px-[50px] mobile: px-[50px]"
+      }`}
     >
       <div className="flex w-full justify-between items-center sticky">
         <section className="flex items-center gap-[24px]">
           <Link to="/">
             <figure className="flex gap-[4.5px] items-center">
-              <img src={icLogo} alt="🐼" className="w-[40px] h-[40px]" />
+              <img
+                src={icLogo}
+                alt="🐼"
+                className="w-[40px] h-[40px] mobile:hidden"
+              />
               <img
                 src={nameLogo}
                 alt="판다마켓"
@@ -63,7 +61,9 @@ function Header({ isMenuVisible }) {
           )}
         </section>
         <Button
-          classNames={`${style.button.width} ${style.button.height} rounded-[8px] text-[16px] font-[600]`}
+          classNames={`${
+            isMenuVisible ? "w-[88px] h-[42px]" : "w-[128px] h-[48px]"
+          } rounded-[8px] text-[16px] font-[600]`}
         >
           로그인
         </Button>

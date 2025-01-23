@@ -3,6 +3,11 @@ export default {
   content: ["./index.html", "./src/**/*.{html,js,jsx}", "./index.css"],
   theme: {
     extend: {
+      screens: {
+        pc: "1200px",
+        tablet: "744px",
+        mobile: "375px",
+      },
       fontFamily: {
         sans: ["Pretendard", "sans-serif"],
       },

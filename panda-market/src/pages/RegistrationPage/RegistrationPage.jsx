@@ -10,29 +10,86 @@ function RegistrationPage() {
   const [formValues, setFormValues] = useState({
     name: "",
     description: "",
-    price: "",
+    price: 0,
     tags: [],
   });
 
-  const [tagInput, setTagInput] = useState("");
+  const [tagInput, setTagInput] = useState({
+    tagTempValue: "",
+    isComposing: false,
+  });
 
-  const handelSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const newProductId = await productService.postNewProduct(formValues);
+    const newProduct = await productService.postNewProduct(formValues);
+    if (newProduct) {
+      const newProductId = newProduct.data._id;
       navigate(`/items/${newProductId}`);
-      return;
-    } catch (error) {
-      console.error(error);
-      return;
     }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleTagInputChange = (e) =>
+    setTagInput((prev) => ({ ...prev, tagTempValue: e.target.value }));
+
+  // 인풋 태그에서 엔터키 누를 때 반응 제어
+  const handleEnterKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+    if (
+      e.key === "Enter" &&
+      e.target.name === "tags" &&
+      !tagInput.isComposing
+    ) {
+      const currentTagInputValue = tagInput.tagTempValue.trim();
+      const updatedTagValues = formValues.tags.includes(currentTagInputValue)
+        ? [...prev.tags, tagInput.tagTempValue.trim()]
+        : [...prev.tags];
+      setFormValues((prev) => ({
+        ...prev,
+        tags: [...updatedTagValues],
+      }));
+      setTagInput((prev) => ({ ...prev, tagTempValue: "" }));
+    }
+  };
+
+  // 태그 한글 입력 시 문자 조합 상태 관리 - 이거 안하면 "아이패드", "드" 이런 식으로 태그 배열에 들어감...
+  const handleTagCompositionState = {
+    start: () =>
+      setTagInput((prev) => ({
+        // 조합 시작
+        ...prev,
+        isComposing: true,
+      })),
+    end: () =>
+      setTagInput((prev) => ({
+        ...prev,
+        isComposing: false,
+      })),
+  };
+
+  // 태그 삭제
+  const handleRemoveTag = (index) => {
+    const updatedTagValues = formValues.tags.filter((_, i) => i !== index);
+    setFormValues((prev) => ({
+      ...prev,
+      tags: updatedTagValues,
+    }));
   };
 
   return (
     <main className="flex flex justify-center pt-[26px] pb-[162px]">
       <form
         className="flex flex-col items-start w-[1200px] gap-[29px]"
-        onSubmit={handelSubmit}
+        onSubmit={handleSubmit}
       >
         <header className="w-full flex justify-between">
           <h1 className="text-[20px] font-[700] leading-[32px] text-secondary-800">
@@ -59,6 +116,9 @@ function RegistrationPage() {
               placeholder="상품명을 입력해주세요"
               classNames="w-full"
               name="name"
+              value={formValues.name}
+              onChange={handleInputChange}
+              onKeyDown={handleEnterKeyDown}
             />
           </div>
           <div className="flex flex-col w-full items-start gap-[16px]">
@@ -74,6 +134,9 @@ function RegistrationPage() {
               InputOrTextarea="textarea"
               classNames="w-full h-[282px]"
               name="description"
+              value={formValues.description}
+              onChange={handleInputChange}
+              onKeyDown={handleEnterKeyDown}
             />
           </div>
           <div className="flex flex-col w-full items-start gap-[16px]">
@@ -88,6 +151,9 @@ function RegistrationPage() {
               placeholder="판매 가격을 입력해주세요"
               classNames="w-full"
               name="price"
+              value={formValues.price}
+              onChange={handleInputChange}
+              onKeyDown={handleEnterKeyDown}
             />
           </div>
           <div className="flex flex-col w-full items-start gap-[16px]">
@@ -102,13 +168,17 @@ function RegistrationPage() {
               placeholder="태그를 입력해주세요"
               classNames="w-full"
               name="tags"
-              value={tagInput}
+              value={tagInput.tagTempValue}
+              onChange={handleTagInputChange}
+              onKeyDown={handleEnterKeyDown}
+              onCompositionStart={handleTagCompositionState.start}
+              onCompositionEnd={handleTagCompositionState.end}
             />
           </div>
         </fieldset>
-        <div>
+        <div className="flex gap-[10px]">
           {formValues.tags.map((tag, index) => (
-            <Tag index={index} onClickRemoveButton={handleTagRemove}>
+            <Tag index={index} onClickRemoveButton={handleRemoveTag}>
               {tag}
             </Tag>
           ))}

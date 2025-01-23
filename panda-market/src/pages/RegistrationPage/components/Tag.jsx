@@ -5,9 +5,10 @@ function Tag({ children, index, onClickRemoveButton }) {
     <div className="flex px-[16px] py-[6px] gap-[10px] rounded-[26px] bg-secondary-100 ">
       <span className="text-[16px] font-[400] leading-[26px] text-secondary-800">
         {children}
-        <button onClick={() => onClickRemoveButton(index)}>X</button>
       </span>
-      <img src={xIcon} alt="취소" className="w-[22px] h-[24px]" />
+      <button type="button" onClick={() => onClickRemoveButton(index)}>
+        <img src={xIcon} alt="취소" className="w-[22px] h-[24px]" />
+      </button>
     </div>
   );
 }

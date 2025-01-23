@@ -12,17 +12,17 @@ import { Link } from "react-router-dom";
 function HomePage() {
   return (
     <main>
-      <section className="flex justify-center items-end h-[540px] bg-[#CFE5FF]">
+      <section className="flex justify-center items-end pc:h-[540px] tablet:h-[744px] mobile:h-[540px] bg-[#CFE5FF]">
         <HomeBannerContent
           image={
             <img
               src={homeTopImg}
               art="Welcome to Panda Market!"
-              className="w-[746px] h-[340px]"
+              className="pc:w-[746px] pc:h-[340px] tablet:w-[746px] tablet:h-[340px] mobile:w-[448px] h-[204px]"
             />
           }
         >
-          <h1 className="large-txt text-left">
+          <h1 className="large-txt pc:text-left tablet:text-center mobile:text-center">
             일상의 모든 물건을
             <br /> 거래해 보세요
           </h1>
@@ -76,17 +76,17 @@ function HomePage() {
           </p>
         </HomeArticleLeftAlign>
       </section>
-      <section className="flex justify-center items-end h-[540px] bg-[#CFE5FF]">
+      <section className="flex justify-center items-end pc:h-[540px] tablet:h-[744px] mobile:h-[540px] bg-[#CFE5FF]">
         <HomeBannerContent
           image={
             <img
               src={homeBottomImg}
               art="Welcome to Panda Market!"
-              className="w-[746px] h-[397px]"
+              className="pc:w-[746px] pc:h-[397px] tablet:w-[746px] tablet:h-[397px] w-[375px] h-[198px]"
             />
           }
         >
-          <h1 className="large-txt text-left">
+          <h1 className="large-txt pc:text-left tablet:text-center mobile:text-center">
             믿을 수 있는
             <br /> 판다마켓 중고 거래
           </h1>

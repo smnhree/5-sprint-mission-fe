@@ -2,8 +2,7 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: "http://localhost:8000",
-  // baseURL: "https://panda-market-t9vr.onrender.com/",
-  timeout: 5000,
+  // baseURL: "https://panda-market-t9vr.onrender.com",
 });
 
 const productService = {
@@ -23,6 +22,7 @@ async function getProductList({
     const res = await instance.get("items/", { params: searchParams });
     return res.data;
   } catch (e) {
+    console.log(e.response);
     return e;
   }
 }
@@ -44,8 +44,10 @@ async function postNewProduct({ name, description, price, tags }) {
       price,
       tags,
     });
-    return res.data.data._id;
+    const result = res.data;
+    return result;
   } catch (e) {
+    console.log(e.response);
     return e;
   }
 }
