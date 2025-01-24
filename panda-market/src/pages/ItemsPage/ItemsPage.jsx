@@ -76,7 +76,7 @@ function ItemsPage() {
       console.error(error);
       return;
     }
-    const { message, data, totalCount } = result;
+    const { data, totalCount } = result;
     setData((prev) => ({
       ...prev,
       renderingData: data,
@@ -231,7 +231,7 @@ function ItemsPage() {
               <DropdownList
                 currentOrder={apiQuery.order}
                 onClick={() => handleClickDropdown()}
-                onChange={(e) => setInputTemp(() => e.target.value)}
+                onClickOrderButton={handleClickOrderButton}
                 isActive={isActiveDropdown}
               />
             </div>
@@ -253,7 +253,7 @@ function ItemsPage() {
               <InputTextarea
                 InputOrTextarea="input"
                 placeholder="검색할 상품을 입력해주세요"
-                onChange={handleChangeInput}
+                onChange={(e) => setInputTemp(() => e.target.value)}
                 value={apiQuery.keyword}
                 classNames="w-[250px] h-[42px] px-[20px] py-[9px]"
               />
