@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:8000",
-  // baseURL: "https://panda-market-t9vr.onrender.com",
+  // baseURL: "http://localhost:8000",
+  baseURL: "https://panda-market-t9vr.onrender.com",
 });
 
 const productService = {
