@@ -30,7 +30,7 @@ function ArticlePreview({ article }) {
             {formatDate(article.createdAt)}
           </span>
         </div>
-        <div className="flex items-center gap-[4px] w-[70px]">
+        <div className="flex justify-center items-center gap-[4px] w-[70px]">
           <Image src={heartImage} alt="heart" width={16} height={16} />
           <span className="text-[16px] font-[400] text-gray-500">
             {article.likeCount >= 10000 ? "9999+" : article.likeCount}

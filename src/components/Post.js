@@ -1,21 +1,45 @@
-import DropDown from "@/components/DropDown";
 import Image from "next/image";
 import heartIcon from "@/assets/images/ic-heart.svg";
 import { formatDate } from "@/utils/dateFormat";
 import defaultArticleImage from "@/assets/images/laptop.svg";
 import defaultUserImage from "@/assets/images/ic-profile.svg";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import { deleteArticle } from "@/lib/api";
+
+const DropDown = dynamic(() => import("@/components/DropDown"), {
+  ssr: false,
+});
 
 function Post({ post }) {
+  const router = useRouter();
+
   const imageUrl = {
-    article: post.imageUrl || defaultArticleImage,
+    article: post.images[0] || defaultArticleImage,
     user: post.userImageUrl || defaultUserImage,
+  };
+
+  const handleEditButtonClick = () => {
+    router.push(`/board/${post.id}/edit`);
+  };
+
+  const handleDeleteButtonClick = async () => {
+    try {
+      await deleteArticle(post.id);
+      router.push("/board");
+    } catch (error) {
+      console.error("게시글 삭제 실패:", error);
+    }
   };
 
   return (
     <>
       <div className="flex justify-between items-center">
         <h1 className="text-[20px] font-[700] text-gray-800">{post.title}</h1>
-        <DropDown />
+        <DropDown
+          onEditClick={handleEditButtonClick}
+          onDeleteClick={handleDeleteButtonClick}
+        />
       </div>
       <div className="flex items-center gap-[32px] my-[16px] pb-[16px] border-b border-gray-200">
         <div className="flex items-center pr-[32px] border-r border-gray-200">

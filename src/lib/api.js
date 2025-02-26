@@ -55,13 +55,19 @@ export async function getArticleDetail({ articleId }) {
 }
 
 // 게시글 작성
-export async function createArticle({ username, title, content, image = [] }) {
-  await axios.post(`${API_URL}/articles`, {
+export async function createArticle({
+  username = "총명한 판다",
+  title,
+  content,
+  images = [],
+}) {
+  const response = await axios.post(`${API_URL}/articles`, {
     username,
     title,
     content,
-    image,
+    images,
   });
+  return response.data.data.id;
 }
 
 // 게시글 수정
@@ -76,7 +82,10 @@ export async function updateArticle(
     ...(image.length > 0 && { image }),
   };
 
-  await axios.patch(`${API_URL}/articles/${articleId}`, updateData);
+  const response = await axios.patch(
+    `${API_URL}/articles/${articleId}`,
+    updateData
+  );
 }
 
 // 게시글 삭제
@@ -91,11 +100,18 @@ async function getArticleComments(articleId) {
 }
 
 // 게시글 댓글 작성
-export async function createComment(articleId, { username, content }) {
-  await axios.post(`${API_URL}/articles/${articleId}/comments`, {
-    username,
-    content,
-  });
+export async function createComment(
+  articleId,
+  { username = "똑똑한 판다", content }
+) {
+  const { data } = await axios.post(
+    `${API_URL}/articles/${articleId}/comments`,
+    {
+      username,
+      content,
+    }
+  );
+  return data;
 }
 
 // 게시글 댓글 수정
@@ -108,5 +124,5 @@ export async function updateComment(commentId, { username, content }) {
 
 // 게시글 댓글 삭제
 export async function deleteComment(commentId) {
-  await axios.delete(`${API_URL}/comments/${commentId}`);
+  await axios.delete(`${API_URL}/articles/comments/${commentId}`);
 }

@@ -2,11 +2,34 @@ import Head from "next/head";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Textarea from "@/components/Textarea";
-import { createArticle } from "@/lib/api";
+import { getArticleDetail } from "@/lib/api";
 import { useForm, Controller } from "react-hook-form";
+import { updateArticle } from "@/lib/api";
 import { useRouter } from "next/router";
 
-function WriteArticle() {
+export async function getServerSideProps({ params }) {
+  try {
+    const { id } = params;
+    const data = await getArticleDetail({ articleId: id });
+
+    return {
+      props: {
+        article: {
+          id: data.article.data.id,
+          title: data.article.data.title,
+          content: data.article.data.content,
+        },
+      },
+    };
+  } catch (error) {
+    console.error("데이터 가져오기 실패:", error);
+    return {
+      props: { article: null },
+    };
+  }
+}
+
+function EditArticle({ article }) {
   const router = useRouter();
 
   const {
@@ -15,8 +38,8 @@ function WriteArticle() {
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      title: "",
-      content: "",
+      title: article?.title || "",
+      content: article?.content || "",
     },
     mode: "onChange",
   });
@@ -25,30 +48,30 @@ function WriteArticle() {
 
   const onSubmit = async (data) => {
     try {
-      const requestData = {
+      await updateArticle(article.id, {
         title: data.title,
         content: data.content,
-      };
-      const articleId = await createArticle(requestData);
-      router.push(`/board/${articleId}`);
+      });
+      router.push(`/board/${article.id}`);
     } catch (error) {
-      console.error("게시글 생성 실패:", error);
+      console.error("게시글 수정 실패:", error);
+      // 에러 처리 (예: 알림 표시)
     }
   };
 
   return (
     <>
       <Head>
-        <title>판다마켓 | 중고 거래 플랫폼 - 게시글 쓰기</title>
+        <title>판다마켓 | 중고 거래 플랫폼 - 게시글 수정하기</title>
       </Head>
       <main className="flex flex-col flex-grow gap-[24px]">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex justify-between items-center">
             <h1 className="text-[20px] font-[700] text-gray-800">
-              게시글 쓰기
+              게시글 수정하기
             </h1>
             <Button type="submit" status={buttonStatus}>
-              등록
+              수정
             </Button>
           </div>
           <ul className="flex flex-col gap-[16px]">
@@ -56,6 +79,7 @@ function WriteArticle() {
               <Controller
                 control={control}
                 name="title"
+                defaultValue={article.title}
                 rules={{
                   required: "제목은 필수 입력값입니다",
                 }}
@@ -70,11 +94,17 @@ function WriteArticle() {
                   />
                 )}
               />
+              {errors.title && (
+                <p className="mt-1 text-red-500 text-sm">
+                  {errors.title.message}
+                </p>
+              )}
             </li>
             <li>
               <Controller
                 control={control}
                 name="content"
+                defaultValue={article.content}
                 rules={{
                   required: "내용은 필수 입력값입니다",
                 }}
@@ -90,6 +120,11 @@ function WriteArticle() {
                   />
                 )}
               />
+              {errors.content && (
+                <p className="mt-1 text-red-500 text-sm">
+                  {errors.content.message}
+                </p>
+              )}
             </li>
           </ul>
         </form>
@@ -98,4 +133,4 @@ function WriteArticle() {
   );
 }
 
-export default WriteArticle;
+export default EditArticle;
