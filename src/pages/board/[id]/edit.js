@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Button from "@/components/Button";
-import Input from "@/components/Input";
-import Textarea from "@/components/Textarea";
+import Input from "@/components/input/Input";
+import Textarea from "@/components/input/Textarea";
 import { getArticleDetail } from "@/lib/api";
 import { useForm, Controller } from "react-hook-form";
 import { updateArticle } from "@/lib/api";

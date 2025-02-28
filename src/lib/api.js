@@ -9,7 +9,7 @@ export async function getArticleList({
   sort = "recent",
   keyword = "",
 } = {}) {
-  const response = await axios.get(`${API_URL}/articles/`, {
+  const { data } = await axios.get(`${API_URL}/articles/`, {
     params: {
       offset,
       limit,
@@ -17,18 +17,18 @@ export async function getArticleList({
       keyword,
     },
   });
-  return response.data;
+  return data;
 }
 
 // 베스트 게시글 조회
-export async function getBestArticles(limit = 1) {
-  const response = await axios.get(`${API_URL}/articles/`, {
+export async function getBestArticles(limit = 3) {
+  const { data } = await axios.get(`${API_URL}/articles/`, {
     params: {
       limit,
       sort: "likeCount",
     },
   });
-  return response.data;
+  return data;
 }
 
 // 게시글 조회
@@ -61,13 +61,13 @@ export async function createArticle({
   content,
   images = [],
 }) {
-  const response = await axios.post(`${API_URL}/articles`, {
+  const { data } = await axios.post(`${API_URL}/articles`, {
     username,
     title,
     content,
     images,
   });
-  return response.data.data.id;
+  return data.data.id;
 }
 
 // 게시글 수정
@@ -82,10 +82,7 @@ export async function updateArticle(
     ...(image.length > 0 && { image }),
   };
 
-  const response = await axios.patch(
-    `${API_URL}/articles/${articleId}`,
-    updateData
-  );
+  await axios.patch(`${API_URL}/articles/${articleId}`, updateData);
 }
 
 // 게시글 삭제

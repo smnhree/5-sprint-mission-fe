@@ -3,31 +3,31 @@ import Image from "next/image";
 import sortIcon from "@/assets/images/ic-sort.svg";
 import arrowDownIcon from "@/assets/images/ic-arrow-down.svg";
 
-function SortDropDown({ selectedSort, onSortChange }) {
+function SortDropDown({ sortValue, onChangeSortValue }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSortToggle = () => {
-    setIsOpen(!isOpen);
-  };
+  const sortButtonText = sortValue === "recent" ? "최신순" : "좋아요순";
+
+  const handleToggle = () => setIsOpen(!isOpen);
 
   const handleSortClick = (sort) => {
-    onSortChange(sort);
+    onChangeSortValue(sort);
     setIsOpen(false);
   };
 
   return (
     <div className="relative">
       <button
-        onClick={handleSortToggle}
+        onClick={handleToggle}
         className="flex md:hidden justify-center items-center p-[9px] rounded-[12px] border border-gray-200"
       >
         <Image src={sortIcon} alt="sort" width={24} height={24} />
       </button>
       <button
-        onClick={handleSortToggle}
+        onClick={handleToggle}
         className="hidden md:flex items-center relative w-[130px] h-[42px] rounded-[12px] border border-gray-200"
       >
-        <span className="w-full text-center pr-[24px]">{selectedSort}</span>
+        <span className="w-full text-center pr-[24px]">{sortButtonText}</span>
         <Image
           src={arrowDownIcon}
           alt="sort"
