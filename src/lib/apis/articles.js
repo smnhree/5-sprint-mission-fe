@@ -39,6 +39,12 @@ export async function getArticle({ articleId }) {
   return data;
 }
 
+// todo: Article 작성
+
+// todo: Article 수정
+
+// todo: Article 삭제
+
 // Article Comments 조회
 export async function getArticleComments({ articleId }) {
   const { data } = await axios.get(`${API_URL}/articles/${articleId}/comments`);

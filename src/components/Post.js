@@ -16,7 +16,7 @@ function Post({ post }) {
 
   const imageUrl = {
     article: post.images[0] || defaultArticleImage,
-    user: post.userImageUrl || defaultUserImage,
+    user: defaultUserImage,
   };
 
   const handleEditButtonClick = () => {
@@ -25,8 +25,10 @@ function Post({ post }) {
 
   const handleDeleteButtonClick = async () => {
     try {
-      await deleteArticle(post.id);
-      router.push("/board");
+      if (window.confirm("게시글을 삭제하시겠습니까?")) {
+        await deleteArticle(post.id);
+        router.push("/board");
+      }
     } catch (error) {
       console.error("게시글 삭제 실패:", error);
     }

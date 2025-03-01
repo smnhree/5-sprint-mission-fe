@@ -48,13 +48,12 @@ export function useArticleComments({ articleId }) {
 }
 
 // Article Comment 작성
-export function useCreateComment({
-  articleId,
-  username = "똑똑한 판다",
-  content,
-}) {
+export function useCreateComment({ articleId }) {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: () => createComment({ articleId, username, content }),
+    mutationFn: ({ username = "똑똑한 판다", content }) =>
+      createComment({ articleId, username, content }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         // 댓글 목록 새로고침(쿼리 무효화)
@@ -86,6 +85,7 @@ export function useUpdateComment({ articleId }) {
 }
 
 // Article Comment 삭제
+// todo: 삭제 후 새로고침 안 되는 문제 해결하기
 export function useDeleteComment({ articleId }) {
   const queryClient = useQueryClient();
 

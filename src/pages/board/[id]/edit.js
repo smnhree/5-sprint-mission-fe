@@ -2,9 +2,8 @@ import Head from "next/head";
 import Button from "@/components/Button";
 import Input from "@/components/input/Input";
 import Textarea from "@/components/input/Textarea";
-import { getArticleDetail } from "@/lib/api";
 import { useForm, Controller } from "react-hook-form";
-import { updateArticle } from "@/lib/api";
+import { getArticleDetail, updateArticle } from "@/lib/api";
 import { useRouter } from "next/router";
 
 export async function getServerSideProps({ params }) {
@@ -15,9 +14,9 @@ export async function getServerSideProps({ params }) {
     return {
       props: {
         article: {
-          id: data.article.data.id,
-          title: data.article.data.title,
-          content: data.article.data.content,
+          id: data.id,
+          title: data.title,
+          content: data.content,
         },
       },
     };
