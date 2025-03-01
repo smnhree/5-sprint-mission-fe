@@ -1,43 +1,72 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useUpdateComment, useDeleteComment } from "@/lib/queries/articles";
+import { formatRelativeTime } from "@/utils/dateFormat";
+
+import Image from "next/image";
 import DropDown from "@/components/DropDown";
 import defaultUserImage from "@/assets/images/ic-profile.svg";
-import Image from "next/image";
-import { formatRelativeTime } from "@/utils/dateFormat";
-import { useForm } from "react-hook-form";
 
-function Comment({
-  comment,
-  onDelete,
-  isEditing,
-  onEditStart,
-  onEditCancel,
-  onEditComplete,
-  value,
-}) {
+function Comment({ comment, articleId }) {
+  const [isEditing, setIsEditing] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { isValid },
   } = useForm({
     defaultValues: {
-      content: value,
+      content: comment.content,
     },
     mode: "onChange",
   });
 
-  const imageUrl = comment.userImageUrl || defaultUserImage;
+  const { mutate: updateComment } = useUpdateComment({ articleId });
+  const { mutate: deleteComment } = useDeleteComment({ commentId: comment.id });
+
+  const imageUrl = defaultUserImage;
 
   const handleEditButtonClick = () => {
-    onEditStart();
+    setIsEditing(true);
   };
 
+  const handleEditCancel = () => {
+    setIsEditing(false);
+  };
+
+  // 댓글 수정
+  const onSubmit = (data) => {
+    updateComment(
+      { commentId: comment.id, content: data.content },
+      {
+        onSuccess: () => {
+          setIsEditing(false);
+          alert("댓글이 수정되었습니다.");
+        },
+        onError: (error) => {
+          console.error("댓글 수정 실패", error);
+          alert("댓글 수정에 실패했습니다.");
+        },
+      }
+    );
+  };
+
+  // 댓글 삭제
   const handleDeleteButtonClick = async () => {
     if (window.confirm("댓글을 삭제하시겠습니까?")) {
-      onDelete(comment.id);
+      deleteComment(
+        { commentId: comment.id },
+        {
+          onSuccess: () => {
+            alert("댓글이 삭제되었습니다.");
+          },
+          onError: (error) => {
+            console.error("댓글 삭제 실패", error);
+            alert("댓글 삭제에 실패했습니다.");
+          },
+        }
+      );
     }
-  };
-
-  const onSubmit = (data) => {
-    onEditComplete(data.content);
   };
 
   return (
@@ -65,7 +94,7 @@ function Comment({
             </button>
             <button
               type="button"
-              onClick={onEditCancel}
+              onClick={handleEditCancel}
               className="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"
             >
               취소

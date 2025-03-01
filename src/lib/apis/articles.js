@@ -63,10 +63,7 @@ export async function createComment({
 
 // Article Comment 수정
 export async function updateComment({ commentId, content }) {
-  await axios.patch(`${API_URL}/comments/${commentId}`, {
-    username,
-    content,
-  });
+  await axios.patch(`${API_URL}/articles/comments/${commentId}`, { content });
 }
 
 // Article Comment 삭제

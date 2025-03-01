@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getBestArticleList,
   getArticleList,
@@ -65,37 +65,41 @@ export function useCreateComment({
 }
 
 // Article Comment 수정
-export function useUpdateComment({ commentId, content }) {
+export function useUpdateComment({ articleId }) {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: () => updateComment({ commentId, content }),
-    onSuccess: () => {
+    mutationFn: ({ commentId, content }) =>
+      updateComment({ commentId, content }),
+    onSuccess: (_, variables) => {
+      // 댓글 목록 쿼리 무효화
       queryClient.invalidateQueries({
-        // 댓글 새로 고침(list, detail)
-        queryKey: ["articles", articleId, "comments"],
+        queryKey: QUERY_KEYS.Articles.comments.list(articleId),
       });
-    },
-    onError: (error) => {
-      console.error(error);
+
+      // 개별 댓글 쿼리 무효화
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.Articles.comments.detail(variables.commentId),
+      });
     },
   });
 }
 
 // Article Comment 삭제
-export function useDeleteComment({ commentId }) {
+export function useDeleteComment({ articleId }) {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: () => deleteComment({ commentId }),
-    onSuccess: () => {
+    mutationFn: ({ commentId }) => deleteComment({ commentId }),
+    onSuccess: (_, variables) => {
       // invalidateQueries(['articles', articleId, 'comments'])만 사용하면 댓글 목록 캐시만 무효화되고, 댓글 상세 캐시는 제거되지 않음
       queryClient.removeQueries({
         // 삭제된 댓글 캐시 제거
-        queryKey: QUERY_KEYS.Articles.comments.detail(articleId, commentId),
+        queryKey: QUERY_KEYS.Articles.comments.detail(variables.commentId),
       });
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.Articles.comments.list(articleId),
       });
-    },
-    onError: (error) => {
-      console.error(error);
     },
   });
 }

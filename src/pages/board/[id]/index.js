@@ -12,7 +12,6 @@ import { getArticle } from "@/lib/apis/articles";
 import { QUERY_KEYS } from "@/lib/constants/queryKeys";
 
 import Head from "next/head";
-import { useState } from "react";
 import PostSection from "./_components/postSection";
 import CreateCommentSection from "./_components/createCommentSection";
 import CommentsSection from "./_components/commentsSection";
@@ -35,35 +34,22 @@ export async function getServerSideProps({ params }) {
 
   return {
     props: {
+      articleId: id,
       dehydratedState: dehydrate(queryClient),
     },
   };
 }
 
-function ArticleDetail() {
-  const [comments, setComments] = useState(initialComments);
-  const [editingCommentId, setEditingCommentId] = useState(null);
-  const [editingContent, setEditingContent] = useState("");
-
+function ArticleDetail({ articleId }) {
   return (
     <>
       <Head>
         <title>판다마켓 | 중고 거래 플랫폼 - 자유게시판</title>
       </Head>
       <main className="flex flex-col gap-[32px] py-[18px]">
-        <PostSection />
-        <CreateCommentSection
-          articleId={article.id}
-          comments={comments}
-          setComments={setComments}
-        />
-        <CommentsSection
-          comments={comments}
-          editingCommentId={editingCommentId}
-          editingContent={editingContent}
-          setEditingCommentId={setEditingCommentId}
-          setEditingContent={setEditingContent}
-        />
+        <PostSection articleId={articleId} />
+        <CreateCommentSection articleId={articleId} />
+        <CommentsSection articleId={articleId} />
       </main>
     </>
   );
