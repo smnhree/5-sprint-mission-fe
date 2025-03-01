@@ -21,13 +21,13 @@ import ArticleListSection from "./_components/ArticleListSection";
 export async function getServerSideProps() {
   const queryClient = new QueryClient();
 
-  // 서버에서 인기 게시글 데이터 프리페치
+  // 서버에서 인기 게시글 목록 데이터 프리페치
   await queryClient.prefetchQuery({
     queryKey: QUERY_KEYS.Articles.best(BEST_ARTICLE_LIMIT),
-    queryFn: () => getBestArticleList(BEST_ARTICLE_LIMIT),
+    queryFn: () => getBestArticleList({ limit: BEST_ARTICLE_LIMIT }),
   });
 
-  // 서버에서 게시글 데이터 프리페치
+  // 서버에서 게시글 목록 데이터 프리페치
   await queryClient.prefetchQuery({
     queryKey: QUERY_KEYS.Articles.list({
       offset: 0,

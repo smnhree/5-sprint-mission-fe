@@ -12,8 +12,6 @@ export default function BestArticleListSection() {
   // 2. 데이터 없음 처리
   if (!bestArticleList.data) return null;
 
-  console.log(bestArticleList);
-
   return (
     <section>
       <h1 className="text-[18px] md:text-[20px] font-[700] text-gray-800">

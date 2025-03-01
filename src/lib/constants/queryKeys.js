@@ -14,5 +14,22 @@ export const QUERY_KEYS = {
         keyword: params.keyword,
       },
     ],
+    detail: (articleId) => [
+      ...QUERY_KEYS.Articles.all,
+      "detail",
+      { articleId },
+    ],
+    comments: {
+      list: (articleId) => [
+        ...QUERY_KEYS.Articles.all,
+        "comments",
+        { articleId },
+      ],
+      detail: (commentId) => [
+        ...QUERY_KEYS.Articles.all,
+        "comments",
+        { commentId },
+      ],
+    },
   },
 };
